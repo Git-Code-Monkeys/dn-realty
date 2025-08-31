@@ -25,6 +25,7 @@ import {
   OverviewField,
   PreviewField,
 } from '@payloadcms/plugin-seo/fields'
+import { populateAuthors } from '../hooks/populateAuthors'
 
 export const Posts: CollectionConfig<'posts'> = {
   slug: 'posts',
@@ -183,43 +184,44 @@ export const Posts: CollectionConfig<'posts'> = {
         ],
       },
     },
-    // {
-    //   name: 'authors',
-    //   type: 'relationship',
-    //   admin: {
-    //     position: 'sidebar',
-    //   },
-    //   hasMany: true,
-    //   relationTo: 'users',
-    // },
+    {
+      name: 'authors',
+      type: 'relationship',
+      admin: {
+        position: 'sidebar',
+      },
+      hasMany: true,
+      relationTo: 'users',
+    },
     // // This field is only used to populate the user data via the `populateAuthors` hook
     // // This is because the `user` collection has access control locked to protect user privacy
     // // GraphQL will also not return mutated user data that differs from the underlying schema
-    // {
-    //   name: 'populatedAuthors',
-    //   type: 'array',
-    //   access: {
-    //     update: () => false,
-    //   },
-    //   admin: {
-    //     disabled: true,
-    //     readOnly: true,
-    //   },
-    //   fields: [
-    //     {
-    //       name: 'id',
-    //       type: 'text',
-    //     },
-    //     {
-    //       name: 'name',
-    //       type: 'text',
-    //     },
-    //   ],
-    // },
+    {
+      name: 'populatedAuthors',
+      type: 'array',
+      access: {
+        update: () => false,
+      },
+      admin: {
+        disabled: true,
+        readOnly: true,
+      },
+      fields: [
+        {
+          name: 'id',
+          type: 'text',
+        },
+        {
+          name: 'name',
+          type: 'text',
+        },
+      ],
+    },
     ...slugField(),
   ],
   hooks: {
     afterChange: [revalidatePost],
+    afterRead: [populateAuthors],
     afterDelete: [revalidateDelete],
   },
   versions: {

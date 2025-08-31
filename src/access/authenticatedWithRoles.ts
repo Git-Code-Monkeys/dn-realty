@@ -2,7 +2,7 @@ import { AccessArgs, AccessResult } from 'payload'
 import { UserRoleEnum } from './types'
 import { hasUserRoles } from './utils'
 
-type AccessWithRoles<TData = any> = (
+type AccessWithRoles<TData = unknown> = (
   args: AccessArgs<TData>,
   requiredRoles?: UserRoleEnum[] | UserRoleEnum,
 ) => AccessResult | Promise<AccessResult>

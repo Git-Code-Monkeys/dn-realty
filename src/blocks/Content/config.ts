@@ -1,10 +1,10 @@
 import type { Block, Field } from 'payload'
 
 import {
-  FixedToolbarFeature,
-  HeadingFeature,
-  InlineToolbarFeature,
-  lexicalEditor,
+    FixedToolbarFeature,
+    HeadingFeature,
+    InlineToolbarFeature,
+    lexicalEditor,
 } from '@payloadcms/richtext-lexical'
 
 import { link } from '@/fields/link'
@@ -47,6 +47,12 @@ const columnFields: Field[] = [
       },
     }),
     label: false,
+  },
+  {
+    name: 'media',
+    type: 'upload',
+    relationTo: 'media',
+    required: false,
   },
   {
     name: 'enableLink',

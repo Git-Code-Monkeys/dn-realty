@@ -3,14 +3,16 @@ import { postgresAdapter } from '@payloadcms/db-postgres'
 
 import path from 'path'
 import { buildConfig, PayloadRequest } from 'payload'
-import sharp from 'sharp'; // sharp-import
+import sharp from 'sharp' // sharp-import
 import { fileURLToPath } from 'url'
 
 import { defaultLexical } from '@/fields/defaultLexical'
 import { Categories } from './collections/Categories'
+import Listings from './collections/Listings'
 import { Media } from './collections/Media'
 import { Pages } from './collections/Pages'
 import { Posts } from './collections/Posts'
+import PropertyTypes from './collections/PropertyTypes'
 import { Users } from './collections/Users'
 import { Footer } from './Footer/config'
 import { Header } from './Header/config'
@@ -63,9 +65,9 @@ export default buildConfig({
     pool: {
       connectionString: process.env.DATABASE_URI || '',
     },
-    idType: 'uuid'
+    idType: 'uuid',
   }),
-  collections: [Pages, Posts, Media, Categories, Users],
+  collections: [Pages, Posts, Media, Categories, Users, PropertyTypes, Listings],
   cors: [getServerSideURL()].filter(Boolean),
   globals: [Header, Footer],
   plugins: [

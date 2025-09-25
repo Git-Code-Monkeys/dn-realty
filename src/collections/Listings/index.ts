@@ -157,6 +157,7 @@ const Listings: CollectionConfig = {
                     { label: 'Australian Capital Territory (ACT)', value: 'ACT' },
                     { label: 'Northern Territory (NT)', value: 'NT' },
                   ],
+                  defaultValue: 'NSW',
                 },
                 { name: 'postcode', type: 'text', required: true },
               ],

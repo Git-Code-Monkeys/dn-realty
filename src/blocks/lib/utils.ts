@@ -1,0 +1,1 @@
+export const getSubSetOfFields = <T extends Record<string, any>>(obj: T, keys: (keyof T)[]): Partial<T> => {

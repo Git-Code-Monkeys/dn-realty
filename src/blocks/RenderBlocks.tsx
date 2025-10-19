@@ -4,16 +4,20 @@ import type { Page } from '@/payload-types'
 
 import { ArchiveBlock } from '@/blocks/ArchiveBlock/Component'
 import { CallToActionBlock } from '@/blocks/CallToAction/Component'
+import { CarouselBlock } from '@/blocks/CarouselBlock/Component'
 import { ContentBlock } from '@/blocks/Content/Component'
 import { FormBlock } from '@/blocks/Form/Component'
 import { MediaBlock } from '@/blocks/MediaBlock/Component'
+import { ListingGroupBlock } from './ListingGroupBlock/Component'
 
 const blockComponents = {
   archive: ArchiveBlock,
+  carousel: CarouselBlock,
   content: ContentBlock,
   cta: CallToActionBlock,
   formBlock: FormBlock,
   mediaBlock: MediaBlock,
+  listingGroup: ListingGroupBlock,
 }
 
 export const RenderBlocks: React.FC<{

@@ -4,11 +4,11 @@ import { authenticated } from '@/access/authenticated'
 import { slugField } from '@/fields/slug'
 import type { CollectionConfig } from 'payload'
 
-const PropertyTypes: CollectionConfig = {
-  slug: 'property-types',
+const ListingTypes: CollectionConfig = {
+  slug: 'listing-types',
   labels: {
-    singular: 'Property Type',
-    plural: 'Property Types',
+    singular: 'Listing Type',
+    plural: 'Listing Types',
   },
   access: {
     create: authenticated,
@@ -39,4 +39,4 @@ const PropertyTypes: CollectionConfig = {
   ],
 }
 
-export default PropertyTypes
+export default ListingTypes

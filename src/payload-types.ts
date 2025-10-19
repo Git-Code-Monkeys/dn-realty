@@ -72,8 +72,9 @@ export interface Config {
     media: Media;
     categories: Category;
     users: User;
-    'property-types': PropertyType;
+    'listing-types': ListingType;
     listings: Listing;
+    'listing-groups': ListingGroup;
     redirects: Redirect;
     forms: Form;
     'form-submissions': FormSubmission;
@@ -90,8 +91,9 @@ export interface Config {
     media: MediaSelect<false> | MediaSelect<true>;
     categories: CategoriesSelect<false> | CategoriesSelect<true>;
     users: UsersSelect<false> | UsersSelect<true>;
-    'property-types': PropertyTypesSelect<false> | PropertyTypesSelect<true>;
+    'listing-types': ListingTypesSelect<false> | ListingTypesSelect<true>;
     listings: ListingsSelect<false> | ListingsSelect<true>;
+    'listing-groups': ListingGroupsSelect<false> | ListingGroupsSelect<true>;
     redirects: RedirectsSelect<false> | RedirectsSelect<true>;
     forms: FormsSelect<false> | FormsSelect<true>;
     'form-submissions': FormSubmissionsSelect<false> | FormSubmissionsSelect<true>;
@@ -158,7 +160,7 @@ export interface Page {
       root: {
         type: string;
         children: {
-          type: string;
+          type: any;
           version: number;
           [k: string]: unknown;
         }[];
@@ -188,14 +190,22 @@ export interface Page {
             /**
              * Choose how the link should be rendered.
              */
-            appearance?: ('default' | 'outline') | null;
+            appearance?: ('default' | 'outline' | 'inline' | 'link' | 'ghost' | 'destructive') | null;
           };
           id?: string | null;
         }[]
       | null;
     media?: (string | null) | Media;
   };
-  layout: (CallToActionBlock | ContentBlock | MediaBlock | ArchiveBlock | FormBlock)[];
+  layout: (
+    | CallToActionBlock
+    | CarouselBlock
+    | ContentBlock
+    | MediaBlock
+    | ArchiveBlock
+    | FormBlock
+    | ListingGroupBlock
+  )[];
   meta?: {
     title?: string | null;
     /**
@@ -223,7 +233,7 @@ export interface Post {
     root: {
       type: string;
       children: {
-        type: string;
+        type: any;
         version: number;
         [k: string]: unknown;
       }[];
@@ -269,7 +279,7 @@ export interface Media {
     root: {
       type: string;
       children: {
-        type: string;
+        type: any;
         version: number;
         [k: string]: unknown;
       }[];
@@ -406,7 +416,7 @@ export interface CallToActionBlock {
     root: {
       type: string;
       children: {
-        type: string;
+        type: any;
         version: number;
         [k: string]: unknown;
       }[];
@@ -447,6 +457,72 @@ export interface CallToActionBlock {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "CarouselBlock".
+ */
+export interface CarouselBlock {
+  size?: ('oneThird' | 'half' | 'twoThirds' | 'full') | null;
+  richText?: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  enableLink?: boolean | null;
+  link?: {
+    type?: ('reference' | 'custom') | null;
+    newTab?: boolean | null;
+    reference?:
+      | ({
+          relationTo: 'pages';
+          value: string | Page;
+        } | null)
+      | ({
+          relationTo: 'posts';
+          value: string | Post;
+        } | null);
+    url?: string | null;
+    label: string;
+    /**
+     * Choose how the link should be rendered.
+     */
+    appearance?: ('default' | 'outline' | 'inline' | 'link' | 'ghost' | 'destructive') | null;
+  };
+  type: 'general' | 'testimonial';
+  items?:
+    | {
+        richText: {
+          root: {
+            type: string;
+            children: {
+              type: any;
+              version: number;
+              [k: string]: unknown;
+            }[];
+            direction: ('ltr' | 'rtl') | null;
+            format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+            indent: number;
+            version: number;
+          };
+          [k: string]: unknown;
+        };
+        id?: string | null;
+      }[]
+    | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'carousel';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "ContentBlock".
  */
 export interface ContentBlock {
@@ -457,7 +533,7 @@ export interface ContentBlock {
           root: {
             type: string;
             children: {
-              type: string;
+              type: any;
               version: number;
               [k: string]: unknown;
             }[];
@@ -487,7 +563,7 @@ export interface ContentBlock {
           /**
            * Choose how the link should be rendered.
            */
-          appearance?: ('default' | 'outline') | null;
+          appearance?: ('default' | 'outline' | 'inline' | 'link' | 'ghost' | 'destructive') | null;
         };
         id?: string | null;
       }[]
@@ -515,7 +591,7 @@ export interface ArchiveBlock {
     root: {
       type: string;
       children: {
-        type: string;
+        type: any;
         version: number;
         [k: string]: unknown;
       }[];
@@ -551,7 +627,7 @@ export interface FormBlock {
     root: {
       type: string;
       children: {
-        type: string;
+        type: any;
         version: number;
         [k: string]: unknown;
       }[];
@@ -608,7 +684,7 @@ export interface Form {
               root: {
                 type: string;
                 children: {
-                  type: string;
+                  type: any;
                   version: number;
                   [k: string]: unknown;
                 }[];
@@ -691,7 +767,7 @@ export interface Form {
     root: {
       type: string;
       children: {
-        type: string;
+        type: any;
         version: number;
         [k: string]: unknown;
       }[];
@@ -723,7 +799,7 @@ export interface Form {
           root: {
             type: string;
             children: {
-              type: string;
+              type: any;
               version: number;
               [k: string]: unknown;
             }[];
@@ -742,13 +818,52 @@ export interface Form {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "property-types".
+ * via the `definition` "ListingGroupBlock".
  */
-export interface PropertyType {
+export interface ListingGroupBlock {
+  introContent?: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  listingGroup: string | ListingGroup;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'listingGroup';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "listing-groups".
+ */
+export interface ListingGroup {
   id: string;
   title: string;
-  description?: string | null;
-  icon?: (string | null) | Media;
+  description?: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  listings?: (string | Listing)[] | null;
   slug?: string | null;
   slugLock?: boolean | null;
   updatedAt: string;
@@ -774,7 +889,7 @@ export interface Listing {
     state: 'NSW' | 'VIC' | 'QLD' | 'WA' | 'SA' | 'TAS' | 'ACT' | 'NT';
     postcode: string;
   };
-  propertyType: string | PropertyType;
+  listingType: string | ListingType;
   bedrooms: number;
   bathrooms: number;
   /**
@@ -792,7 +907,7 @@ export interface Listing {
     root: {
       type: string;
       children: {
-        type: string;
+        type: any;
         version: number;
         [k: string]: unknown;
       }[];
@@ -824,6 +939,20 @@ export interface Listing {
   updatedAt: string;
   createdAt: string;
   _status?: ('draft' | 'published') | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "listing-types".
+ */
+export interface ListingType {
+  id: string;
+  title: string;
+  description?: string | null;
+  icon?: (string | null) | Media;
+  slug?: string | null;
+  slugLock?: boolean | null;
+  updatedAt: string;
+  createdAt: string;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -1019,12 +1148,16 @@ export interface PayloadLockedDocument {
         value: string | User;
       } | null)
     | ({
-        relationTo: 'property-types';
-        value: string | PropertyType;
+        relationTo: 'listing-types';
+        value: string | ListingType;
       } | null)
     | ({
         relationTo: 'listings';
         value: string | Listing;
+      } | null)
+    | ({
+        relationTo: 'listing-groups';
+        value: string | ListingGroup;
       } | null)
     | ({
         relationTo: 'redirects';
@@ -1120,10 +1253,12 @@ export interface PagesSelect<T extends boolean = true> {
     | T
     | {
         cta?: T | CallToActionBlockSelect<T>;
+        carousel?: T | CarouselBlockSelect<T>;
         content?: T | ContentBlockSelect<T>;
         mediaBlock?: T | MediaBlockSelect<T>;
         archive?: T | ArchiveBlockSelect<T>;
         formBlock?: T | FormBlockSelect<T>;
+        listingGroup?: T | ListingGroupBlockSelect<T>;
       };
   meta?:
     | T
@@ -1158,6 +1293,34 @@ export interface CallToActionBlockSelect<T extends boolean = true> {
               label?: T;
               appearance?: T;
             };
+        id?: T;
+      };
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "CarouselBlock_select".
+ */
+export interface CarouselBlockSelect<T extends boolean = true> {
+  size?: T;
+  richText?: T;
+  enableLink?: T;
+  link?:
+    | T
+    | {
+        type?: T;
+        newTab?: T;
+        reference?: T;
+        url?: T;
+        label?: T;
+        appearance?: T;
+      };
+  type?: T;
+  items?:
+    | T
+    | {
+        richText?: T;
         id?: T;
       };
   id?: T;
@@ -1221,6 +1384,16 @@ export interface FormBlockSelect<T extends boolean = true> {
   form?: T;
   enableIntro?: T;
   introContent?: T;
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "ListingGroupBlock_select".
+ */
+export interface ListingGroupBlockSelect<T extends boolean = true> {
+  introContent?: T;
+  listingGroup?: T;
   id?: T;
   blockName?: T;
 }
@@ -1394,9 +1567,9 @@ export interface UsersSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "property-types_select".
+ * via the `definition` "listing-types_select".
  */
-export interface PropertyTypesSelect<T extends boolean = true> {
+export interface ListingTypesSelect<T extends boolean = true> {
   title?: T;
   description?: T;
   icon?: T;
@@ -1428,7 +1601,7 @@ export interface ListingsSelect<T extends boolean = true> {
         state?: T;
         postcode?: T;
       };
-  propertyType?: T;
+  listingType?: T;
   bedrooms?: T;
   bathrooms?: T;
   size?: T;
@@ -1460,6 +1633,19 @@ export interface ListingsSelect<T extends boolean = true> {
   updatedAt?: T;
   createdAt?: T;
   _status?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "listing-groups_select".
+ */
+export interface ListingGroupsSelect<T extends boolean = true> {
+  title?: T;
+  description?: T;
+  listings?: T;
+  slug?: T;
+  slugLock?: T;
+  updatedAt?: T;
+  createdAt?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -1856,7 +2042,7 @@ export interface BannerBlock {
     root: {
       type: string;
       children: {
-        type: string;
+        type: any;
         version: number;
         [k: string]: unknown;
       }[];

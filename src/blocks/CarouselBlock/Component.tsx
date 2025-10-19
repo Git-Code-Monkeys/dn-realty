@@ -23,15 +23,15 @@ export const CarouselBlock: React.FC<
     id?: string
   }
 > = (props) => {
-  const { id, type = 'general', items, ...restProps } = props
+  const { type = 'general', items, ...restProps } = props
+  const downMd = useMediaQuery(`(max-width: ${cssVariables.breakpoints.md}px)`)
+  const downLg = useMediaQuery(`(max-width: ${cssVariables.breakpoints.lg}px)`)
 
   if (!items || items.length === 0) {
     return null
   }
 
   const isTestimonial = type === 'testimonial'
-  const downMd = useMediaQuery(`(max-width: ${cssVariables.breakpoints.md}px)`)
-  const downLg = useMediaQuery(`(max-width: ${cssVariables.breakpoints.lg}px)`)
 
   const enableCarousel = (downMd && items.length > 2) || (downLg && items.length > 3)
   return (
@@ -39,7 +39,8 @@ export const CarouselBlock: React.FC<
       <ContentBlock
         columns={[restProps]}
         blockType="content"
-        classNames={{ container: 'my-4', richText: 'my-4' }}
+        classNames={{ richText: 'my-4' }}
+        className="my-4"
       />
       <div className="container">
         <Carousel

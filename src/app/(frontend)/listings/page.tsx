@@ -23,7 +23,6 @@ export default async function Page() {
       description: true,
     },
   })
-  console.log('🚀 ~ page.tsx:23 ~ Page ~ listings:', listings)
 
   return (
     <>

@@ -9,7 +9,6 @@ import React from 'react'
 
 export const ListingGroupBlock: React.FC<ListingGroupBlockProps & { id?: string }> = (props) => {
   const { introContent, listingGroup } = props
-  console.log('🚀 ~ Component.tsx:11 ~ ListingGroupBlock ~ props:', props)
 
   if (!listingGroup || typeof listingGroup === 'string') return null
 

@@ -1,14 +1,23 @@
+import RichText from '@/components/RichText'
 import { cn } from '@/utilities/ui'
 import React from 'react'
-import RichText from '@/components/RichText'
 
 import type { ContentBlock as ContentBlockProps } from '@/payload-types'
 
-import { CMSLink } from '../../components/Link'
 import { Media } from '@/components/Media'
+import { CMSLink } from '../../components/Link'
 
-export const ContentBlock: React.FC<ContentBlockProps> = (props) => {
-  const { columns } = props
+type ClassNameProps = {
+  className?: string
+  classNames?: {
+    media?: string
+    richText?: string
+    link?: string
+  }
+}
+
+export const ContentBlock: React.FC<ContentBlockProps & ClassNameProps> = (props) => {
+  const { columns, classNames, className } = props
 
   const colsSpanClasses = {
     full: '12',
@@ -18,7 +27,7 @@ export const ContentBlock: React.FC<ContentBlockProps> = (props) => {
   }
 
   return (
-    <div className="container my-16">
+    <div className={cn('container my-16', className)}>
       <div className="grid grid-cols-4 lg:grid-cols-12 gap-y-8 gap-x-16">
         {columns &&
           columns.length > 0 &&
@@ -27,15 +36,27 @@ export const ContentBlock: React.FC<ContentBlockProps> = (props) => {
 
             return (
               <div
-                className={cn(`col-span-4 lg:col-span-${colsSpanClasses[size!]}`, {
-                  'md:col-span-2': size !== 'full',
-                })}
+                className={cn(
+                  `col-span-4 lg:col-span-${colsSpanClasses[size!]}`,
+                  {
+                    'md:col-span-2': size !== 'full',
+                  },
+                  classNames?.richText || '',
+                )}
                 key={index}
               >
-                {richText && <RichText data={richText} enableGutter={false} />}
-                {media && <Media resource={media} className="mb-4" />}
+                {richText && (
+                  <RichText
+                    data={richText}
+                    enableGutter={false}
+                    className={cn({ 'mb-4': !media }, classNames?.richText || '')}
+                  />
+                )}
+                {media && (
+                  <Media resource={media} className={cn('mb-4', classNames?.media || '')} />
+                )}
 
-                {enableLink && <CMSLink {...link} />}
+                {enableLink && <CMSLink {...link} className={cn(classNames?.link || '')} />}
               </div>
             )
           })}

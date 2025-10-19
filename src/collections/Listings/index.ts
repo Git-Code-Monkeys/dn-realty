@@ -22,22 +22,22 @@ const Listings: CollectionConfig = {
   },
   admin: {
     useAsTitle: 'title',
-    defaultColumns: ['title', 'status', 'pricing', 'address'],
-    livePreview: {
-      url: ({ data, req }) => {
-        const path = generatePreviewPath({
-          slug: typeof data?.slug === 'string' ? data.slug : '',
-          collection: 'posts',
-          req,
-        })
+    defaultColumns: ['title', 'slug', 'updatedAt'],
+    // livePreview: {
+    //   url: ({ data, req }) => {
+    //     const path = generatePreviewPath({
+    //       slug: typeof data?.slug === 'string' ? data.slug : '',
+    //       collection: 'listings',
+    //       req,
+    //     })
 
-        return path
-      },
-    },
+    //     return path
+    //   },
+    // },
     preview: (data, { req }) =>
       generatePreviewPath({
         slug: typeof data?.slug === 'string' ? data.slug : '',
-        collection: 'posts',
+        collection: 'listings',
         req,
       }),
   },
@@ -169,9 +169,9 @@ const Listings: CollectionConfig = {
           fields: [
             // Property Type (House, Apartment, etc.)
             {
-              name: 'propertyType',
+              name: 'listingType',
               type: 'relationship',
-              relationTo: 'property-types',
+              relationTo: 'listing-types',
               required: true,
             },
             // Number of Bedrooms
@@ -296,7 +296,7 @@ const Listings: CollectionConfig = {
   versions: {
     drafts: {
       autosave: {
-        interval: 100, // We set this interval for optimal live preview
+        interval: 800, // We set this interval for optimal live preview
       },
       schedulePublish: true,
     },

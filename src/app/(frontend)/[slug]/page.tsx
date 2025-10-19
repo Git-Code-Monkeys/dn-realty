@@ -1,17 +1,17 @@
 import type { Metadata } from 'next'
 
 import { PayloadRedirects } from '@/components/PayloadRedirects'
-import configPromise from '@payload-config'
-import { getPayload, type RequiredDataFromCollectionSlug } from 'payload'
-import { draftMode } from 'next/headers'
-import React, { cache } from 'react'
 import { homeStatic } from '@/endpoints/seed/home-static'
+import configPromise from '@payload-config'
+import { draftMode } from 'next/headers'
+import { getPayload, type RequiredDataFromCollectionSlug } from 'payload'
+import { cache } from 'react'
 
 import { RenderBlocks } from '@/blocks/RenderBlocks'
+import { LivePreviewListener } from '@/components/LivePreviewListener'
 import { RenderHero } from '@/heros/RenderHero'
 import { generateMeta } from '@/utilities/generateMeta'
 import PageClient from './page.client'
-import { LivePreviewListener } from '@/components/LivePreviewListener'
 
 export async function generateStaticParams() {
   const payload = await getPayload({ config: configPromise })
@@ -72,8 +72,14 @@ export default async function Page({ params: paramsPromise }: Args) {
       <PayloadRedirects disableNotFound url={url} />
 
       {draft && <LivePreviewListener />}
-
-      <RenderHero {...hero} />
+      <div className="relative">
+        <RenderHero {...hero} />
+        {/* <div className="absolute bottom-0 left-0 w-full bg-transparent translate-y-1/2 z-50">
+          <Card className="container bg-white h-full p-8">
+            <Search />
+          </Card>
+        </div> */}
+      </div>
       <RenderBlocks blocks={layout} />
     </article>
   )
@@ -104,7 +110,59 @@ const queryPageBySlug = cache(async ({ slug }: { slug: string }) => {
         equals: slug,
       },
     },
+    depth: 10,
   })
 
-  return result.docs?.[0] || null
+  const page = result.docs?.[0]
+  if (!page) return null
+  const populatedLayout = await Promise.all(
+    page.layout?.map(async (block) => {
+      if (block.blockType === 'listingGroup' && block.listingGroup) {
+        try {
+          // Get the listing group ID
+          const listingGroupId =
+            typeof block.listingGroup === 'string' ? block.listingGroup : block.listingGroup.id
+
+          // Fetch the listing group with FULL population
+          const populatedListingGroup = await payload.findByID({
+            collection: 'listing-groups',
+            id: listingGroupId,
+            depth: 3, // This ensures listings and their fields are populated
+          })
+
+          // If listings are still not populated, manually populate them too
+          if (populatedListingGroup.listings) {
+            const fullyPopulatedListings = await Promise.all(
+              populatedListingGroup.listings.map(async (listingRef) => {
+                const listingId = typeof listingRef === 'string' ? listingRef : listingRef.id
+
+                const fullListing = await payload.findByID({
+                  collection: 'listings',
+                  id: listingId,
+                  depth: 2, // Populate all listing fields including address, description, etc.
+                })
+
+                return fullListing
+              }),
+            )
+
+            populatedListingGroup.listings = fullyPopulatedListings
+          }
+
+          return {
+            ...block,
+            listingGroup: populatedListingGroup,
+          }
+        } catch (error) {
+          console.error('Error populating listing group:', error)
+          return block // Return original block if population fails
+        }
+      }
+      return block
+    }) || [],
+  )
+  return {
+    ...page,
+    layout: populatedLayout,
+  }
 })

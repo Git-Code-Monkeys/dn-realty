@@ -1,5 +1,5 @@
-import tailwindcssAnimate from 'tailwindcss-animate'
 import typography from '@tailwindcss/typography'
+import tailwindcssAnimate from 'tailwindcss-animate'
 
 /** @type {import('tailwindcss').Config} */
 const config = {
@@ -95,7 +95,8 @@ const config = {
       },
       fontFamily: {
         mono: ['var(--font-geist-mono)'],
-        sans: ['var(--font-geist-sans)'],
+        sans: ['var(--font-inter)'],
+        serif: ['var(--font-montserrat)'],
       },
       keyframes: {
         'accordion-down': {
@@ -115,7 +116,32 @@ const config = {
               '--tw-prose-headings': 'var(--text)',
               h1: {
                 fontWeight: 'normal',
-                marginBottom: '0.25em',
+                marginBottom: '0',
+                marginTop: '0',
+              },
+              h2: {
+                marginTop: '0',
+                marginBottom: '0',
+              },
+              h3: {
+                marginTop: '0',
+                marginBottom: '0',
+              },
+              h4: {
+                marginTop: '0',
+                marginBottom: '0',
+              },
+              h5: {
+                marginTop: '0',
+                marginBottom: '0',
+              },
+              h6: {
+                marginTop: '0',
+                marginBottom: '0',
+              },
+              p: {
+                marginBottom: '0',
+                marginTop: '0',
               },
             },
           ],
@@ -125,10 +151,12 @@ const config = {
             {
               h1: {
                 fontSize: '2.5rem',
+                marginTop: '0',
               },
               h2: {
                 fontSize: '1.25rem',
                 fontWeight: 600,
+                marginTop: '0',
               },
             },
           ],

@@ -4,7 +4,6 @@ import { authenticated } from '@/access/authenticated'
 import { authenticatedOrPublished } from '@/access/authenticatedOrPublished'
 import { slugField } from '@/fields/slug'
 import { populatePublishedAt } from '@/hooks/populatePublishedAt'
-import { generatePreviewPath } from '@/utilities/generatePreviewPath'
 import {
   MetaDescriptionField,
   MetaImageField,
@@ -23,23 +22,6 @@ const Listings: CollectionConfig = {
   admin: {
     useAsTitle: 'title',
     defaultColumns: ['title', 'slug', 'updatedAt'],
-    // livePreview: {
-    //   url: ({ data, req }) => {
-    //     const path = generatePreviewPath({
-    //       slug: typeof data?.slug === 'string' ? data.slug : '',
-    //       collection: 'listings',
-    //       req,
-    //     })
-
-    //     return path
-    //   },
-    // },
-    preview: (data, { req }) =>
-      generatePreviewPath({
-        slug: typeof data?.slug === 'string' ? data.slug : '',
-        collection: 'listings',
-        req,
-      }),
   },
   access: {
     read: authenticatedOrPublished, // public access to listings
@@ -50,17 +32,6 @@ const Listings: CollectionConfig = {
   defaultPopulate: {
     title: true,
     slug: true,
-    coverImage: true,
-    pricing: true,
-    status: true,
-    propertyType: true,
-    bedrooms: true,
-    bathrooms: true,
-    size: true,
-    meta: {
-      image: true,
-      description: true,
-    },
   },
   fields: [
     // Listing Title
@@ -296,7 +267,7 @@ const Listings: CollectionConfig = {
   versions: {
     drafts: {
       autosave: {
-        interval: 800, // We set this interval for optimal live preview
+        interval: 2000, // We set this interval for optimal live preview
       },
       schedulePublish: true,
     },

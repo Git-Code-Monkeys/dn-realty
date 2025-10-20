@@ -3,7 +3,6 @@ import {
   DefaultNodeTypes,
   SerializedBlockNode,
   SerializedLinkNode,
-  type DefaultTypedEditorState,
 } from '@payloadcms/richtext-lexical'
 import type { SerializedEditorState } from '@payloadcms/richtext-lexical/lexical'
 import {
@@ -73,7 +72,7 @@ const jsxConverters: JSXConvertersFunction<NodeTypes> = ({ defaultConverters }) 
 })
 
 type Props = {
-  data: DefaultTypedEditorState | SerializedEditorState
+  data: SerializedEditorState
   enableGutter?: boolean
   enableProse?: boolean
 } & React.HTMLAttributes<HTMLDivElement>

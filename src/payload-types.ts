@@ -837,6 +837,26 @@ export interface ListingGroupBlock {
     [k: string]: unknown;
   } | null;
   listingGroup: string | ListingGroup;
+  enableLink?: boolean | null;
+  link?: {
+    type?: ('reference' | 'custom') | null;
+    newTab?: boolean | null;
+    reference?:
+      | ({
+          relationTo: 'pages';
+          value: string | Page;
+        } | null)
+      | ({
+          relationTo: 'posts';
+          value: string | Post;
+        } | null);
+    url?: string | null;
+    label: string;
+    /**
+     * Choose how the link should be rendered.
+     */
+    appearance?: ('default' | 'outline' | 'inline' | 'link' | 'ghost' | 'destructive') | null;
+  };
   id?: string | null;
   blockName?: string | null;
   blockType: 'listingGroup';
@@ -848,21 +868,6 @@ export interface ListingGroupBlock {
 export interface ListingGroup {
   id: string;
   title: string;
-  description?: {
-    root: {
-      type: string;
-      children: {
-        type: any;
-        version: number;
-        [k: string]: unknown;
-      }[];
-      direction: ('ltr' | 'rtl') | null;
-      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
-      indent: number;
-      version: number;
-    };
-    [k: string]: unknown;
-  } | null;
   listings?: (string | Listing)[] | null;
   slug?: string | null;
   slugLock?: boolean | null;
@@ -1394,6 +1399,17 @@ export interface FormBlockSelect<T extends boolean = true> {
 export interface ListingGroupBlockSelect<T extends boolean = true> {
   introContent?: T;
   listingGroup?: T;
+  enableLink?: T;
+  link?:
+    | T
+    | {
+        type?: T;
+        newTab?: T;
+        reference?: T;
+        url?: T;
+        label?: T;
+        appearance?: T;
+      };
   id?: T;
   blockName?: T;
 }
@@ -1640,7 +1656,6 @@ export interface ListingsSelect<T extends boolean = true> {
  */
 export interface ListingGroupsSelect<T extends boolean = true> {
   title?: T;
-  description?: T;
   listings?: T;
   slug?: T;
   slugLock?: T;
@@ -1937,6 +1952,35 @@ export interface Header {
  */
 export interface Footer {
   id: string;
+  title?: string | null;
+  /**
+   * Company branding text displayed in the footer copyright section. This appears as the signature line alongside the copyright notice.
+   */
+  companyTagline?: string | null;
+  richText?: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  phone?: string | null;
+  email?: string | null;
+  officeAddress?: {
+    street?: string | null;
+    suburb?: string | null;
+    state?: ('NSW' | 'VIC' | 'QLD' | 'WA' | 'SA' | 'TAS' | 'ACT' | 'NT') | null;
+    postcode?: string | null;
+    country?: string | null;
+  };
   navItems?:
     | {
         link: {
@@ -1957,6 +2001,10 @@ export interface Footer {
         id?: string | null;
       }[]
     | null;
+  /**
+   * The link to the privacy policy page. This is displayed in the footer copyright section as a link.
+   */
+  privacyPolicyUrl?: string | null;
   updatedAt?: string | null;
   createdAt?: string | null;
 }
@@ -1988,6 +2036,20 @@ export interface HeaderSelect<T extends boolean = true> {
  * via the `definition` "footer_select".
  */
 export interface FooterSelect<T extends boolean = true> {
+  title?: T;
+  companyTagline?: T;
+  richText?: T;
+  phone?: T;
+  email?: T;
+  officeAddress?:
+    | T
+    | {
+        street?: T;
+        suburb?: T;
+        state?: T;
+        postcode?: T;
+        country?: T;
+      };
   navItems?:
     | T
     | {
@@ -2002,6 +2064,7 @@ export interface FooterSelect<T extends boolean = true> {
             };
         id?: T;
       };
+  privacyPolicyUrl?: T;
   updatedAt?: T;
   createdAt?: T;
   globalType?: T;

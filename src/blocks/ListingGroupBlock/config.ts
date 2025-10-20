@@ -1,12 +1,11 @@
+import { link } from '@/fields/link'
 import {
-  BlocksFeature,
   FixedToolbarFeature,
   HeadingFeature,
   InlineToolbarFeature,
   lexicalEditor,
 } from '@payloadcms/richtext-lexical'
 import { Block } from 'payload'
-import { Content } from '../Content/config'
 
 export const ListingGroupBlock: Block = {
   slug: 'listingGroup',
@@ -22,7 +21,6 @@ export const ListingGroupBlock: Block = {
             HeadingFeature({ enabledHeadingSizes: ['h1', 'h2', 'h3', 'h4'] }),
             FixedToolbarFeature(),
             InlineToolbarFeature(),
-            BlocksFeature({ blocks: [Content] }),
           ]
         },
       }),
@@ -35,5 +33,18 @@ export const ListingGroupBlock: Block = {
       label: 'Listing Group',
       required: true,
     },
+    {
+      name: 'enableLink',
+      type: 'checkbox',
+    },
+    link({
+      overrides: {
+        admin: {
+          condition: (_data, siblingData) => {
+            return Boolean(siblingData?.enableLink)
+          },
+        },
+      },
+    }),
   ],
 }

@@ -72,7 +72,7 @@ export function ListingCard({ listing, variant }: ListingCardProps) {
           alt={listing.coverImage.alt ?? listing.title}
           size="33vw"
           fill
-          imgClassName="object-cover transition-transform duration-700 group-hover:scale-110"
+          imgClassName="object-cover transition-transform duration-700 group-hover:scale-105"
         />
       )}
 

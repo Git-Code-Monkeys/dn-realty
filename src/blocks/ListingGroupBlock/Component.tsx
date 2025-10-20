@@ -20,9 +20,6 @@ export const ListingGroupBlock: React.FC<ListingGroupBlockProps & { id?: string 
         ) : (
           <>
             <h2 className="text-2xl font-bold">{listingGroup.title}</h2>
-            {listingGroup.description && (
-              <RichText data={listingGroup.description} enableGutter={false} />
-            )}
           </>
         )}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">

@@ -19,6 +19,7 @@ const nextConfig = {
         }
       }),
     ],
+    qualities: [25, 50, 75, 100],
   },
   webpack: (webpackConfig) => {
     webpackConfig.resolve.extensionAlias = {

@@ -15,6 +15,7 @@ import { generatePreviewPath } from '../../utilities/generatePreviewPath'
 import { revalidateDelete, revalidatePage } from './hooks/revalidatePage'
 
 import { ListingGroupBlock } from '@/blocks/ListingGroupBlock/config'
+import { TeamInfoBlock } from '@/blocks/TeamInfoBlock/config'
 import {
   MetaDescriptionField,
   MetaImageField,
@@ -74,6 +75,7 @@ export const Pages: CollectionConfig<'pages'> = {
                 Archive,
                 FormBlock,
                 ListingGroupBlock,
+                TeamInfoBlock,
               ],
               required: true,
               admin: {

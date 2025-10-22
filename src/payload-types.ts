@@ -75,6 +75,7 @@ export interface Config {
     'listing-types': ListingType;
     listings: Listing;
     'listing-groups': ListingGroup;
+    'team-members': TeamMember;
     redirects: Redirect;
     forms: Form;
     'form-submissions': FormSubmission;
@@ -94,6 +95,7 @@ export interface Config {
     'listing-types': ListingTypesSelect<false> | ListingTypesSelect<true>;
     listings: ListingsSelect<false> | ListingsSelect<true>;
     'listing-groups': ListingGroupsSelect<false> | ListingGroupsSelect<true>;
+    'team-members': TeamMembersSelect<false> | TeamMembersSelect<true>;
     redirects: RedirectsSelect<false> | RedirectsSelect<true>;
     forms: FormsSelect<false> | FormsSelect<true>;
     'form-submissions': FormSubmissionsSelect<false> | FormSubmissionsSelect<true>;
@@ -109,10 +111,12 @@ export interface Config {
   globals: {
     header: Header;
     footer: Footer;
+    contact: Contact;
   };
   globalsSelect: {
     header: HeaderSelect<false> | HeaderSelect<true>;
     footer: FooterSelect<false> | FooterSelect<true>;
+    contact: ContactSelect<false> | ContactSelect<true>;
   };
   locale: null;
   user: User & {
@@ -205,6 +209,7 @@ export interface Page {
     | ArchiveBlock
     | FormBlock
     | ListingGroupBlock
+    | TeamInfoBlock
   )[];
   meta?: {
     title?: string | null;
@@ -961,6 +966,61 @@ export interface ListingType {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "TeamInfoBlock".
+ */
+export interface TeamInfoBlock {
+  members?:
+    | {
+        [k: string]: unknown;
+      }
+    | unknown[]
+    | string
+    | number
+    | boolean
+    | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'teamInfoBlock';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "team-members".
+ */
+export interface TeamMember {
+  id: string;
+  _order?: string | null;
+  name: string;
+  role?: string | null;
+  phone?: string | null;
+  email?: string | null;
+  image?: (string | null) | Media;
+  bio: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  };
+  socialLinks?:
+    | {
+        url: string;
+        socialMedia: 'facebook' | 'instagram' | 'x' | 'linkedin' | 'tiktok' | 'youtube';
+        id?: string | null;
+      }[]
+    | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "redirects".
  */
 export interface Redirect {
@@ -1165,6 +1225,10 @@ export interface PayloadLockedDocument {
         value: string | ListingGroup;
       } | null)
     | ({
+        relationTo: 'team-members';
+        value: string | TeamMember;
+      } | null)
+    | ({
         relationTo: 'redirects';
         value: string | Redirect;
       } | null)
@@ -1264,6 +1328,7 @@ export interface PagesSelect<T extends boolean = true> {
         archive?: T | ArchiveBlockSelect<T>;
         formBlock?: T | FormBlockSelect<T>;
         listingGroup?: T | ListingGroupBlockSelect<T>;
+        teamInfoBlock?: T | TeamInfoBlockSelect<T>;
       };
   meta?:
     | T
@@ -1410,6 +1475,15 @@ export interface ListingGroupBlockSelect<T extends boolean = true> {
         label?: T;
         appearance?: T;
       };
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "TeamInfoBlock_select".
+ */
+export interface TeamInfoBlockSelect<T extends boolean = true> {
+  members?: T;
   id?: T;
   blockName?: T;
 }
@@ -1659,6 +1733,28 @@ export interface ListingGroupsSelect<T extends boolean = true> {
   listings?: T;
   slug?: T;
   slugLock?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "team-members_select".
+ */
+export interface TeamMembersSelect<T extends boolean = true> {
+  _order?: T;
+  name?: T;
+  role?: T;
+  phone?: T;
+  email?: T;
+  image?: T;
+  bio?: T;
+  socialLinks?:
+    | T
+    | {
+        url?: T;
+        socialMedia?: T;
+        id?: T;
+      };
   updatedAt?: T;
   createdAt?: T;
 }
@@ -1972,15 +2068,6 @@ export interface Footer {
     };
     [k: string]: unknown;
   } | null;
-  phone?: string | null;
-  email?: string | null;
-  officeAddress?: {
-    street?: string | null;
-    suburb?: string | null;
-    state?: ('NSW' | 'VIC' | 'QLD' | 'WA' | 'SA' | 'TAS' | 'ACT' | 'NT') | null;
-    postcode?: string | null;
-    country?: string | null;
-  };
   navItems?:
     | {
         link: {
@@ -2005,6 +2092,24 @@ export interface Footer {
    * The link to the privacy policy page. This is displayed in the footer copyright section as a link.
    */
   privacyPolicyUrl?: string | null;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "contact".
+ */
+export interface Contact {
+  id: string;
+  phone?: string | null;
+  email?: string | null;
+  officeAddress?: {
+    street?: string | null;
+    suburb?: string | null;
+    state?: ('NSW' | 'VIC' | 'QLD' | 'WA' | 'SA' | 'TAS' | 'ACT' | 'NT') | null;
+    postcode?: string | null;
+    country?: string | null;
+  };
   updatedAt?: string | null;
   createdAt?: string | null;
 }
@@ -2039,17 +2144,6 @@ export interface FooterSelect<T extends boolean = true> {
   title?: T;
   companyTagline?: T;
   richText?: T;
-  phone?: T;
-  email?: T;
-  officeAddress?:
-    | T
-    | {
-        street?: T;
-        suburb?: T;
-        state?: T;
-        postcode?: T;
-        country?: T;
-      };
   navItems?:
     | T
     | {
@@ -2065,6 +2159,26 @@ export interface FooterSelect<T extends boolean = true> {
         id?: T;
       };
   privacyPolicyUrl?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "contact_select".
+ */
+export interface ContactSelect<T extends boolean = true> {
+  phone?: T;
+  email?: T;
+  officeAddress?:
+    | T
+    | {
+        street?: T;
+        suburb?: T;
+        state?: T;
+        postcode?: T;
+        country?: T;
+      };
   updatedAt?: T;
   createdAt?: T;
   globalType?: T;

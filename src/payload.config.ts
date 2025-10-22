@@ -14,7 +14,9 @@ import ListingTypes from './collections/ListingTypes'
 import { Media } from './collections/Media'
 import { Pages } from './collections/Pages'
 import { Posts } from './collections/Posts'
+import { TeamMembers } from './collections/TeamMembers'
 import { Users } from './collections/Users'
+import { Contact } from './Contact/config'
 import { Footer } from './Footer/config'
 import { Header } from './Header/config'
 import { plugins } from './plugins'
@@ -68,9 +70,19 @@ export default buildConfig({
     },
     idType: 'uuid',
   }),
-  collections: [Pages, Posts, Media, Categories, Users, ListingTypes, Listings, ListingGroups],
+  collections: [
+    Pages,
+    Posts,
+    Media,
+    Categories,
+    Users,
+    ListingTypes,
+    Listings,
+    ListingGroups,
+    TeamMembers,
+  ],
   cors: [getServerSideURL()].filter(Boolean),
-  globals: [Header, Footer],
+  globals: [Header, Footer, Contact],
   plugins: [
     ...plugins,
     // storage-adapter-placeholder

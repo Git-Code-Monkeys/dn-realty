@@ -1,6 +1,6 @@
 import { CMSLink } from '@/components/Link'
 import RichText from '@/components/RichText'
-import type { Footer } from '@/payload-types'
+import type { Contact, Footer } from '@/payload-types'
 import { getCachedGlobal } from '@/utilities/getGlobals'
 import { Mail, MapPin, Phone } from 'lucide-react'
 import Link from 'next/link'
@@ -12,11 +12,12 @@ const defaults = {
 }
 
 export async function Footer() {
-  const footerData: Footer = await getCachedGlobal('footer', 1)()
+  const [footerData, contactData]: [Footer, Contact] = await Promise.all([
+    getCachedGlobal('footer', 1)(),
+    getCachedGlobal('contact', 1)(),
+  ])
+  const { email, phone, officeAddress } = contactData || {}
   const {
-    email,
-    phone,
-    officeAddress,
     richText,
     title = defaults.title,
     companyTagline = defaults.companyTagline,

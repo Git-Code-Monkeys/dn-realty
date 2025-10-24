@@ -1,26 +1,36 @@
-import type { CollectionSlug, File, GlobalSlug, Payload, PayloadRequest } from 'payload'
+import type { CollectionSlug, GlobalSlug, Payload, PayloadRequest } from 'payload'
 
-import { UserRoleEnum } from '@/access/types'
+import { Media } from '@/payload-types'
+import { about as aboutPageData } from './about'
 import { contactForm as contactFormData } from './contact-form'
 import { contact as contactPageData } from './contact-page'
 import { home } from './home'
-import { image1 } from './image-1'
-import { image2 } from './image-2'
-import { imageHero1 } from './image-hero-1'
-import { post1 } from './post-1'
-import { post2 } from './post-2'
-import { post3 } from './post-3'
+import { listingGroupFeatured } from './listing-group-featured'
+import { listingTypes } from './listing-types'
+import { listings } from './listings'
+import { MediaName, mediaPayload } from './media'
+import { ourTeam as ourTeamPageData } from './our-team'
+import { teamMembers } from './team-members'
+import { users } from './users'
 
+/**
+ * DO NOT add `users` to this list as it will delete all users in the database including the current user.
+ */
 const collections: CollectionSlug[] = [
-  'categories',
   'media',
+  'listing-types',
+  'listings',
+  'listing-groups',
+  'team-members',
   'pages',
-  'posts',
   'forms',
   'form-submissions',
+  // Not used in this project for now, but should be fine to keep them here to clean the database
+  'categories',
+  'posts',
   'search',
 ]
-const globals: GlobalSlug[] = ['header', 'footer']
+const globals: GlobalSlug[] = ['header', 'footer', 'contact']
 
 // Next.js revalidation errors are normal when seeding the database without a server running
 // i.e. running `yarn seed` locally instead of using the admin UI within an active app
@@ -46,9 +56,7 @@ export const seed = async ({
     globals.map((global) =>
       payload.updateGlobal({
         slug: global,
-        data: {
-          navItems: [],
-        },
+        data: {},
         depth: 0,
         context: {
           disableRevalidate: true,
@@ -57,207 +65,87 @@ export const seed = async ({
     ),
   )
 
-  await Promise.all(
-    collections.map((collection) => payload.db.deleteMany({ collection, req, where: {} })),
-  )
+  collections.forEach(async (collection) => {
+    await payload.db.deleteMany({ collection, req, where: {} })
+    if (Boolean(payload.collections[collection].config.versions)) {
+      await payload.db.deleteVersions({ collection, req, where: {} })
+    }
+  })
 
-  await Promise.all(
-    collections
-      .filter((collection) => Boolean(payload.collections[collection].config.versions))
-      .map((collection) => payload.db.deleteVersions({ collection, req, where: {} })),
-  )
-
-  payload.logger.info(`— Seeding demo author and user...`)
-
+  const usersData = users()
   await payload.delete({
     collection: 'users',
     depth: 0,
     where: {
       email: {
-        equals: 'demo-author@example.com',
+        in: usersData.map((user) => user.email),
       },
     },
   })
+
+  payload.logger.info('Successfully cleared the database.')
+
+  payload.logger.info(`— Seeding users...`)
+
+  await Promise.all(usersData.map((user) => payload.create({ collection: 'users', data: user })))
 
   payload.logger.info(`— Seeding media...`)
 
-  const [image1Buffer, image2Buffer, image3Buffer, hero1Buffer] = await Promise.all([
-    fetchFileByURL(
-      'https://raw.githubusercontent.com/payloadcms/payload/refs/heads/main/templates/website/src/endpoints/seed/image-post1.webp',
+  const mediaDocs = await Promise.all(
+    mediaPayload.map((media) =>
+      payload.create({
+        collection: 'media',
+        data: media.data,
+        file: media.file,
+      }),
     ),
-    fetchFileByURL(
-      'https://raw.githubusercontent.com/payloadcms/payload/refs/heads/main/templates/website/src/endpoints/seed/image-post2.webp',
+  )
+
+  const mediaMap: Map<MediaName | null | undefined, Media> = new Map(
+    mediaDocs.map((media) => [media.filename as MediaName, media]),
+  )
+  payload.logger.info('🚀 ~ index.ts:99 ~ seed ~ mediaMap:', mediaMap)
+
+  payload.logger.info(`Seeding listing types...`)
+
+  const listingTypesDocs = await Promise.all(
+    listingTypes().map((type) =>
+      payload.create({
+        collection: 'listing-types',
+        data: type,
+      }),
     ),
-    fetchFileByURL(
-      'https://raw.githubusercontent.com/payloadcms/payload/refs/heads/main/templates/website/src/endpoints/seed/image-post3.webp',
+  )
+
+  const listingTypesMap = new Map(listingTypesDocs.map((type) => [type.slug, type]))
+  payload.logger.info('🚀 ~ index.ts:113 ~ seed ~ listingTypesMap:', listingTypesMap)
+
+  payload.logger.info(`— Seeding listings...`)
+
+  const listingsDocs = await Promise.all(
+    listings({ mediaMap, listingTypesMap }).map((listing) =>
+      payload.create({
+        collection: 'listings',
+        data: listing,
+      }),
     ),
-    fetchFileByURL(
-      'https://raw.githubusercontent.com/payloadcms/payload/refs/heads/main/templates/website/src/endpoints/seed/image-hero1.webp',
-    ),
-  ])
+  )
 
-  const [demoAuthor, image1Doc, image2Doc, image3Doc, imageHomeDoc] = await Promise.all([
-    payload.create({
-      collection: 'users',
-      data: {
-        name: 'Demo Author',
-        email: 'demo-author@example.com',
-        password: 'password',
-        roles: [UserRoleEnum.Admin],
-      },
-    }),
-    payload.create({
-      collection: 'media',
-      data: image1,
-      file: image1Buffer,
-    }),
-    payload.create({
-      collection: 'media',
-      data: image2,
-      file: image2Buffer,
-    }),
-    payload.create({
-      collection: 'media',
-      data: image2,
-      file: image3Buffer,
-    }),
-    payload.create({
-      collection: 'media',
-      data: imageHero1,
-      file: hero1Buffer,
-    }),
+  const listingIds = listingsDocs.map((listing) => listing.id)
+  payload.logger.info('🚀 ~ index.ts:123 ~ seed ~ listingIds:', listingIds)
 
-    payload.create({
-      collection: 'categories',
-      data: {
-        title: 'Technology',
-        breadcrumbs: [
-          {
-            label: 'Technology',
-            url: '/technology',
-          },
-        ],
-      },
-    }),
+  payload.logger.info(`— Seeding listing groups...`)
 
+  const [featuredListingGroupDoc] = await Promise.all([
     payload.create({
-      collection: 'categories',
-      data: {
-        title: 'News',
-        breadcrumbs: [
-          {
-            label: 'News',
-            url: '/news',
-          },
-        ],
-      },
-    }),
-
-    payload.create({
-      collection: 'categories',
-      data: {
-        title: 'Finance',
-        breadcrumbs: [
-          {
-            label: 'Finance',
-            url: '/finance',
-          },
-        ],
-      },
-    }),
-    payload.create({
-      collection: 'categories',
-      data: {
-        title: 'Design',
-        breadcrumbs: [
-          {
-            label: 'Design',
-            url: '/design',
-          },
-        ],
-      },
-    }),
-
-    payload.create({
-      collection: 'categories',
-      data: {
-        title: 'Software',
-        breadcrumbs: [
-          {
-            label: 'Software',
-            url: '/software',
-          },
-        ],
-      },
-    }),
-
-    payload.create({
-      collection: 'categories',
-      data: {
-        title: 'Engineering',
-        breadcrumbs: [
-          {
-            label: 'Engineering',
-            url: '/engineering',
-          },
-        ],
-      },
+      collection: 'listing-groups',
+      data: listingGroupFeatured({ listingIds }),
     }),
   ])
-
-  payload.logger.info(`— Seeding posts...`)
-
-  // Do not create posts with `Promise.all` because we want the posts to be created in order
-  // This way we can sort them by `createdAt` or `publishedAt` and they will be in the expected order
-  const post1Doc = await payload.create({
-    collection: 'posts',
-    depth: 0,
-    context: {
-      disableRevalidate: true,
-    },
-    data: post1({ heroImage: image1Doc, blockImage: image2Doc, author: demoAuthor }),
-  })
-
-  const post2Doc = await payload.create({
-    collection: 'posts',
-    depth: 0,
-    context: {
-      disableRevalidate: true,
-    },
-    data: post2({ heroImage: image2Doc, blockImage: image3Doc, author: demoAuthor }),
-  })
-
-  const post3Doc = await payload.create({
-    collection: 'posts',
-    depth: 0,
-    context: {
-      disableRevalidate: true,
-    },
-    data: post3({ heroImage: image3Doc, blockImage: image1Doc, author: demoAuthor }),
-  })
-
-  // update each post with related posts
-  await payload.update({
-    id: post1Doc.id,
-    collection: 'posts',
-    data: {
-      relatedPosts: [post2Doc.id, post3Doc.id],
-    },
-  })
-  await payload.update({
-    id: post2Doc.id,
-    collection: 'posts',
-    data: {
-      relatedPosts: [post1Doc.id, post3Doc.id],
-    },
-  })
-  await payload.update({
-    id: post3Doc.id,
-    collection: 'posts',
-    data: {
-      relatedPosts: [post1Doc.id, post2Doc.id],
-    },
-  })
+  payload.logger.info(
+    '🚀 ~ index.ts:132 ~ seed ~ featuredListingGroupDoc:',
+    featuredListingGroupDoc,
+  )
 
   payload.logger.info(`— Seeding contact form...`)
 
@@ -267,20 +155,55 @@ export const seed = async ({
     data: contactFormData,
   })
 
+  payload.logger.info('Seeding team members')
+  await Promise.all(
+    teamMembers({ mediaMap }).map((member) =>
+      payload.create({
+        collection: 'team-members',
+        data: member,
+      }),
+    ),
+  )
+
   payload.logger.info(`— Seeding pages...`)
 
-  const [_, contactPage] = await Promise.all([
-    payload.create({
-      collection: 'pages',
-      depth: 0,
-      data: home({ heroImage: imageHomeDoc, metaImage: image2Doc }),
+  const contactPage = await payload.create({
+    collection: 'pages',
+    depth: 0,
+    data: contactPageData({ contactForm: contactForm }),
+  })
+
+  const ourTeamPage = await payload.create({
+    collection: 'pages',
+    depth: 0,
+    data: ourTeamPageData({ mediaMap }),
+  })
+
+  const aboutPage = await payload.create({
+    collection: 'pages',
+    depth: 0,
+    data: aboutPageData({ mediaMap }),
+  })
+
+  const homePage = await payload.create({
+    collection: 'pages',
+    depth: 0,
+    data: home({
+      heroImage: mediaMap.get('home-hero-banner.png')!,
+      metaImage: mediaMap.get('home-hero-banner.png')!,
+      layoutImages: {
+        introImage: mediaMap.get('home-intro.png')!,
+      },
+      pageReferences: {
+        contactPageId: contactPage.id,
+        ourTeamPageId: ourTeamPage.id,
+        aboutPageId: aboutPage.id,
+      },
+      listingGroups: {
+        featuredListingGroupId: featuredListingGroupDoc.id,
+      },
     }),
-    payload.create({
-      collection: 'pages',
-      depth: 0,
-      data: contactPageData({ contactForm: contactForm }),
-    }),
-  ])
+  })
 
   payload.logger.info(`— Seeding globals...`)
 
@@ -291,19 +214,68 @@ export const seed = async ({
         navItems: [
           {
             link: {
-              type: 'custom',
-              label: 'Posts',
-              url: '/posts',
+              type: 'reference',
+              newTab: null,
+
+              reference: {
+                relationTo: 'pages',
+
+                value: homePage.id,
+              },
+              url: null,
+              label: 'Home',
             },
           },
           {
             link: {
               type: 'reference',
-              label: 'Contact',
+              newTab: null,
+
               reference: {
                 relationTo: 'pages',
+
+                value: aboutPage.id,
+              },
+              url: '/about',
+              label: 'About',
+            },
+          },
+          {
+            link: {
+              type: 'custom',
+              newTab: null,
+
+              reference: null,
+              url: '/listings',
+              label: 'Listings',
+            },
+          },
+          {
+            link: {
+              type: 'reference',
+              newTab: null,
+
+              reference: {
+                relationTo: 'pages',
+
+                value: ourTeamPage.id,
+              },
+              url: '/our-team',
+              label: 'Our Team',
+            },
+          },
+          {
+            link: {
+              type: 'reference',
+              newTab: null,
+
+              reference: {
+                relationTo: 'pages',
+
                 value: contactPage.id,
               },
+              url: '/contact',
+              label: 'Contact Us',
             },
           },
         ],
@@ -312,54 +284,159 @@ export const seed = async ({
     payload.updateGlobal({
       slug: 'footer',
       data: {
+        title: 'DN REALTY | YOUR LOCAL PROPERTY EXPERTS',
+        companyTagline: 'DN REALTY BY DANNY NATH | Western Sydney',
+        richText: {
+          root: {
+            type: 'root',
+            format: '',
+            indent: 0,
+            version: 1,
+
+            children: [
+              {
+                tag: 'h3',
+                type: 'heading',
+                format: '',
+                indent: 0,
+                version: 1,
+
+                children: [
+                  {
+                    mode: 'normal',
+                    text: 'Do you need some help?',
+                    type: 'text',
+                    style: '',
+                    detail: 0,
+                    format: 0,
+                    version: 1,
+                  },
+                ],
+                direction: null,
+              },
+              {
+                type: 'paragraph',
+                format: '',
+                indent: 0,
+                version: 1,
+
+                children: [
+                  {
+                    mode: 'normal',
+                    text: 'Feeling overwhelmed with real estate choices?',
+                    type: 'text',
+                    style: '',
+                    detail: 0,
+                    format: 0,
+                    version: 1,
+                  },
+                  {
+                    type: 'linebreak',
+                    version: 1,
+                  },
+
+                  {
+                    mode: 'normal',
+                    text: 'Let DN Realty be your guiding light. Our team, led by Danny Nath, understands that navigating property decisions can be daunting. We’re here to simplify the process, offering clear, tailored advice to help you make informed decisions with confidence. Whether you’re unsure about buying, selling, or just need a friendly chat about your options, we’re here for you every step of the way. Reach out to us, and let’s make your real estate journey stress-free and successful.',
+                    type: 'text',
+                    style: '',
+                    detail: 0,
+                    format: 0,
+                    version: 1,
+                  },
+                ],
+                direction: null,
+                textStyle: '',
+                textFormat: 0,
+              },
+            ],
+            direction: null,
+          },
+        },
         navItems: [
           {
             link: {
-              type: 'custom',
-              label: 'Admin',
-              url: '/admin',
+              type: 'reference',
+              newTab: null,
+
+              reference: {
+                relationTo: 'pages',
+
+                value: homePage.id,
+              },
+              url: null,
+              label: 'Home',
+            },
+          },
+          {
+            link: {
+              type: 'reference',
+              newTab: null,
+
+              reference: {
+                relationTo: 'pages',
+
+                value: aboutPage.id,
+              },
+              url: null,
+              label: 'About',
+            },
+          },
+          {
+            link: {
+              type: 'reference',
+              newTab: null,
+
+              reference: {
+                relationTo: 'pages',
+
+                value: contactPage.id,
+              },
+              url: null,
+              label: 'Contact',
             },
           },
           {
             link: {
               type: 'custom',
-              label: 'Source Code',
-              newTab: true,
-              url: 'https://github.com/payloadcms/payload/tree/main/templates/website',
+              newTab: null,
+              url: '/listings',
+              label: 'Listings',
             },
           },
           {
             link: {
-              type: 'custom',
-              label: 'Payload',
-              newTab: true,
-              url: 'https://payloadcms.com/',
+              type: 'reference',
+              newTab: null,
+
+              reference: {
+                relationTo: 'pages',
+
+                value: ourTeamPage.id,
+              },
+              url: '/our-team',
+              label: 'Our Team',
             },
           },
         ],
+        privacyPolicyUrl: null,
+      },
+    }),
+    payload.updateGlobal({
+      slug: 'contact',
+      data: {
+        phone: '(+61) 0433 738 027',
+        email: 'admin@dnrealty.com.au',
+        officeAddress: {
+          street: 'Level 1/93 George St',
+          suburb: 'Parramatta',
+          state: 'NSW',
+          postcode: '2150',
+          country: 'Australia',
+        },
       },
     }),
   ])
 
   payload.logger.info('Seeded database successfully!')
-}
-
-async function fetchFileByURL(url: string): Promise<File> {
-  const res = await fetch(url, {
-    credentials: 'include',
-    method: 'GET',
-  })
-
-  if (!res.ok) {
-    throw new Error(`Failed to fetch file from ${url}, status: ${res.status}`)
-  }
-
-  const data = await res.arrayBuffer()
-
-  return {
-    name: url.split('/').pop() || `file-${Date.now()}`,
-    data: Buffer.from(data),
-    mimetype: `image/${url.split('.').pop()}`,
-    size: data.byteLength,
-  }
 }

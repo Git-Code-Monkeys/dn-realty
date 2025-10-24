@@ -1,0 +1,15 @@
+services:
+  postgres:
+    container_name: dnrealty-db-postgres
+    image: postgres:latest
+    ports:
+      - '5252:5432'
+    environment:
+      POSTGRES_USER: dnrealty
+      POSTGRES_PASSWORD: dnrealty
+      POSTGRES_DB: dnrealty
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:

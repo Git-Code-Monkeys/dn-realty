@@ -17,7 +17,7 @@ import { Page, Post } from '@/payload-types'
 import { getServerSideURL } from '@/utilities/getURL'
 
 const generateTitle: GenerateTitle<Post | Page> = ({ doc }) => {
-  return doc?.title ? `${doc.title} | Payload Website Template` : 'Payload Website Template'
+  return doc?.title ? `${doc.title} | DN Realty` : 'DN Realty'
 }
 
 const generateURL: GenerateURL<Post | Page> = ({ doc }) => {
@@ -94,7 +94,7 @@ export const plugins: Plugin[] = [
   }),
   payloadCloudPlugin(),
   vercelBlobStorage({
-    enabled: true,
+    enabled: process.env.NODE_ENV === 'production',
     collections: {
       [Media.slug]: true,
     },

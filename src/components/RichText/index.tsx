@@ -12,14 +12,19 @@ import {
 } from '@payloadcms/richtext-lexical/react'
 
 import { CodeBlock, CodeBlockProps } from '@/blocks/Code/Component'
+import type { Form as FormBuilderType } from '@payloadcms/plugin-form-builder/types'
 
 import { BannerBlock } from '@/blocks/Banner/Component'
 import { CallToActionBlock } from '@/blocks/CallToAction/Component'
+import { ContactBlock } from '@/blocks/ContactBlock/Component'
 import { ContentBlock } from '@/blocks/Content/Component'
+import { FormBlock } from '@/blocks/Form/Component'
 import type {
   BannerBlock as BannerBlockProps,
   CallToActionBlock as CTABlockProps,
+  ContactBlock as ContactBlockProps,
   ContentBlock as ContentBlockProps,
+  FormBlock as FormBlockProps,
   MediaBlock as MediaBlockProps,
 } from '@/payload-types'
 import { cn } from '@/utilities/ui'
@@ -27,7 +32,13 @@ import { cn } from '@/utilities/ui'
 type NodeTypes =
   | DefaultNodeTypes
   | SerializedBlockNode<
-      CTABlockProps | MediaBlockProps | BannerBlockProps | CodeBlockProps | ContentBlockProps
+      | CTABlockProps
+      | MediaBlockProps
+      | BannerBlockProps
+      | CodeBlockProps
+      | ContentBlockProps
+      | ContactBlockProps
+      | FormBlockProps
     >
 
 const internalDocToHref = ({ linkNode }: { linkNode: SerializedLinkNode }) => {
@@ -68,6 +79,18 @@ const jsxConverters: JSXConvertersFunction<NodeTypes> = ({ defaultConverters }) 
     code: ({ node }) => <CodeBlock className="col-start-2" {...node.fields} />,
     cta: ({ node }) => <CallToActionBlock {...node.fields} />,
     content: ({ node }) => <ContentBlock className="px-0 my-0 mt-4" {...node.fields} />,
+    contact: ({ node }) => <ContactBlock {...node.fields} />,
+    formBlock: ({ node }) => {
+      if (typeof node.fields.form === 'string') return null
+      return (
+        <FormBlock
+          {...node.fields}
+          form={node.fields.form as FormBuilderType}
+          enableIntro={node.fields.enableIntro ?? false}
+          introContent={node.fields.introContent ?? undefined}
+        />
+      )
+    },
   },
 })
 

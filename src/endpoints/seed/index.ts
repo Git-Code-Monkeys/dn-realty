@@ -6,7 +6,7 @@ import { contactForm as contactFormData } from './contact-form'
 import { contact as contactPageData } from './contact-page'
 import { home } from './home'
 import { listingGroupFeatured } from './listing-group-featured'
-import { listingTypes } from './listing-types'
+import { listingTypes, ListingTypeSlug } from './listing-types'
 import { listings } from './listings'
 import { MediaName, mediaPayload } from './media'
 import { ourTeam as ourTeamPageData } from './our-team'
@@ -104,12 +104,12 @@ export const seed = async ({
   const mediaMap: Map<MediaName | null | undefined, Media> = new Map(
     mediaDocs.map((media) => [media.filename as MediaName, media]),
   )
-  payload.logger.info('🚀 ~ index.ts:99 ~ seed ~ mediaMap:', mediaMap)
+  console.log('🚀 ~ index.ts:99 ~ seed ~ mediaMap:', mediaMap)
 
   payload.logger.info(`Seeding listing types...`)
 
   const listingTypesDocs = await Promise.all(
-    listingTypes().map((type) =>
+    listingTypes.map((type) =>
       payload.create({
         collection: 'listing-types',
         data: type,
@@ -117,8 +117,10 @@ export const seed = async ({
     ),
   )
 
-  const listingTypesMap = new Map(listingTypesDocs.map((type) => [type.slug, type]))
-  payload.logger.info('🚀 ~ index.ts:113 ~ seed ~ listingTypesMap:', listingTypesMap)
+  const listingTypesMap = new Map(
+    listingTypesDocs.map((type) => [type.slug as ListingTypeSlug, type]),
+  )
+  console.log('🚀 ~ index.ts:113 ~ seed ~ listingTypesMap:', listingTypesMap)
 
   payload.logger.info(`— Seeding listings...`)
 
@@ -131,8 +133,16 @@ export const seed = async ({
     ),
   )
 
-  const listingIds = listingsDocs.map((listing) => listing.id)
-  payload.logger.info('🚀 ~ index.ts:123 ~ seed ~ listingIds:', listingIds)
+  const featuredListingsSlugs = [
+    '4692-divi-way',
+    '2467-monarch-ave-unit-3',
+    'extra-2-se-of-12th',
+    '157-bloom-blvd',
+  ]
+  const listingIds = listingsDocs
+    .filter((listing) => featuredListingsSlugs.includes(listing.slug as string))
+    .map((listing) => listing.id)
+  console.log('🚀 ~ index.ts:123 ~ seed ~ listingIds:', listingIds)
 
   payload.logger.info(`— Seeding listing groups...`)
 
@@ -142,10 +152,7 @@ export const seed = async ({
       data: listingGroupFeatured({ listingIds }),
     }),
   ])
-  payload.logger.info(
-    '🚀 ~ index.ts:132 ~ seed ~ featuredListingGroupDoc:',
-    featuredListingGroupDoc,
-  )
+  console.log('🚀 ~ index.ts:132 ~ seed ~ featuredListingGroupDoc:', featuredListingGroupDoc)
 
   payload.logger.info(`— Seeding contact form...`)
 
@@ -170,7 +177,7 @@ export const seed = async ({
   const contactPage = await payload.create({
     collection: 'pages',
     depth: 0,
-    data: contactPageData({ contactForm: contactForm }),
+    data: contactPageData({ contactForm, mediaMap }),
   })
 
   const ourTeamPage = await payload.create({

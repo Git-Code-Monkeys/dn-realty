@@ -998,9 +998,9 @@ export const about: (args: AboutArgs) => RequiredDataFromCollectionSlug<'pages'>
       },
     ],
     meta: {
-      title: 'About | DN Realty',
+      title: 'About',
       image: mediaMap.get('about-intro.jpg')?.id as string,
-      description: 'About | DN Realty',
+      description: 'Learn more about DN Realty and our services',
     },
     slug: 'about',
     slugLock: true,

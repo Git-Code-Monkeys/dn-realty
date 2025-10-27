@@ -17,12 +17,14 @@ interface ListingCardProps {
     | 'size'
     | 'listingStatus'
     | 'listingType'
+    | 'parking'
   >
   variant: 'standard' | 'featured'
 }
 export function ListingCard({ listing, variant }: ListingCardProps) {
   const formatPrice = (pricing: typeof listing.pricing) => {
-    if (!pricing) return 'Price unavailable'
+    if (!pricing) return null
+    if (pricing.isHidden) return null
     if (pricing.type === 'poa') return 'Price on Application'
 
     const formatter = new Intl.NumberFormat('en-AU', {
@@ -64,7 +66,7 @@ export function ListingCard({ listing, variant }: ListingCardProps) {
     )
   }
   return (
-    <Card className="relative h-[420px] overflow-hidden group cursor-pointer border-0 shadow-md hover:shadow-2xl transition-all duration-300">
+    <Card className="relative h-[420px] rounded-3xl overflow-hidden group cursor-pointer border-0 shadow-md hover:shadow-2xl transition-all duration-300">
       {/* Background Image */}
       {typeof listing.coverImage === 'object' && (
         <Media
@@ -93,16 +95,20 @@ export function ListingCard({ listing, variant }: ListingCardProps) {
 
           {listing.address && (
             <p className="text-card-foreground/90 text-sm drop-shadow-lg line-clamp-1">
-              📍 {listing.address.street}, {listing.address.suburb}
+              📍{' '}
+              {`${listing.address.street ? `${listing.address.street}, ` : ''}${listing.address.suburb}`}
             </p>
           )}
+          <p className="text-lg font-medium text-card-foreground drop-shadow-2xl line-clamp-2">
+            {formatPrice(listing.pricing)}
+          </p>
 
           {/* Features and Pricing */}
-          <div className="flex items-center gap-4 text-card-foreground/80 text-sm">
+          <div className="flex items-center gap-4 text-card-foreground/80 text-sm flex-wrap justify-center">
             {listing.bedrooms && <span>🛏 {listing.bedrooms}</span>}
             {listing.bathrooms && <span>🚿 {listing.bathrooms}</span>}
             {listing.size && <span>📐 {listing.size}</span>}
-            {formatPrice(listing.pricing)}
+            {listing.parking && <span>🅿️ {listing.parking}</span>}
           </div>
         </div>
       </Card>

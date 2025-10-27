@@ -19,7 +19,26 @@ export const homeStatic: RequiredDataFromCollectionSlug<'pages'> = {
                 format: 0,
                 mode: 'normal',
                 style: '',
-                text: 'Payload Website Template',
+                text: 'DN Realty',
+                version: 1,
+              },
+            ],
+            direction: 'ltr',
+            format: '',
+            indent: 0,
+            tag: 'h4',
+            version: 1,
+          },
+          {
+            type: 'heading',
+            children: [
+              {
+                type: 'text',
+                detail: 0,
+                format: 0,
+                mode: 'normal',
+                style: '',
+                text: '🚧 Website under construction',
                 version: 1,
               },
             ],
@@ -29,6 +48,7 @@ export const homeStatic: RequiredDataFromCollectionSlug<'pages'> = {
             tag: 'h1',
             version: 1,
           },
+
           {
             type: 'paragraph',
             children: [
@@ -80,8 +100,8 @@ export const homeStatic: RequiredDataFromCollectionSlug<'pages'> = {
     },
   },
   meta: {
-    description: 'An open-source website built with Payload and Next.js.',
-    title: 'Payload Website Template',
+    description: 'DN Realty - Your Trusted Real Estate Partner in South Western Sydney',
+    title: 'DN Realty - Your Trusted Real Estate Partner in South Western Sydney',
   },
   title: 'Home',
   layout: [],

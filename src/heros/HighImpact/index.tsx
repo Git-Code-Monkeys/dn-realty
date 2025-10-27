@@ -1,6 +1,5 @@
 'use client'
-import { useHeaderTheme } from '@/providers/HeaderTheme'
-import React, { useEffect } from 'react'
+import React from 'react'
 
 import type { Page } from '@/payload-types'
 
@@ -9,14 +8,14 @@ import { Media } from '@/components/Media'
 import RichText from '@/components/RichText'
 
 export const HighImpactHero: React.FC<Page['hero']> = ({ links, media, richText }) => {
-  const { setHeaderTheme } = useHeaderTheme()
+  // const { setHeaderTheme } = useHeaderTheme()
 
-  useEffect(() => {
-    setHeaderTheme('dark')
-  })
+  // useEffect(() => {
+  //   setHeaderTheme('dark')
+  // })
 
   return (
-    <div className="relative -mt-52 flex items-center justify-center text-white" data-theme="dark">
+    <div className="relative -mt-16 flex items-center justify-center text-white" data-theme="dark">
       <div className="container mb-8 z-10 relative flex items-center justify-center">
         <div className="max-w-5xl md:text-center">
           {richText && <RichText className="mb-6" data={richText} enableGutter={false} />}

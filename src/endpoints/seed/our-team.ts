@@ -12,7 +12,7 @@ export const ourTeam: (args: OurTeamArgs) => RequiredDataFromCollectionSlug<'pag
   return {
     title: 'Our Team',
     hero: {
-      type: 'highImpact',
+      type: 'mediumImpact',
 
       richText: {
         root: {
@@ -22,6 +22,27 @@ export const ourTeam: (args: OurTeamArgs) => RequiredDataFromCollectionSlug<'pag
           version: 1,
 
           children: [
+            {
+              type: 'paragraph',
+              format: '',
+              indent: 0,
+              version: 1,
+
+              children: [
+                {
+                  mode: 'normal',
+                  text: 'World Class Expertise',
+                  type: 'text',
+                  style: '',
+                  detail: 0,
+                  format: 0,
+                  version: 1,
+                },
+              ],
+              direction: null,
+              textStyle: '',
+              textFormat: 0,
+            },
             {
               tag: 'h1',
               type: 'heading',
@@ -44,14 +65,14 @@ export const ourTeam: (args: OurTeamArgs) => RequiredDataFromCollectionSlug<'pag
             },
             {
               type: 'paragraph',
-              format: '',
+              format: 'left',
               indent: 0,
               version: 1,
 
               children: [
                 {
                   mode: 'normal',
-                  text: 'Some great content about our team.',
+                  text: 'Welcome to the DN Realty team – your experts in real estate. United in passion and expertise, we’re here to guide your property journey with excellence.',
                   type: 'text',
                   style: '',
                   detail: 0,
@@ -69,7 +90,7 @@ export const ourTeam: (args: OurTeamArgs) => RequiredDataFromCollectionSlug<'pag
       },
       links: [],
 
-      media: mediaMap.get('team-hero-banner.png')?.id,
+      media: mediaMap.get('team-hero-banner.png')?.id as string,
     },
     layout: [
       {
@@ -78,9 +99,9 @@ export const ourTeam: (args: OurTeamArgs) => RequiredDataFromCollectionSlug<'pag
       },
     ],
     meta: {
-      title: 'Our Team | DN Realty',
+      title: 'Our Team',
       image: mediaMap.get('team-hero-banner.png')?.id as string,
-      description: 'Our Team | DN Realty',
+      description: 'Meet the team at DN Realty',
     },
     slug: 'our-team',
     slugLock: true,

@@ -887,14 +887,15 @@ export interface Listing {
   id: string;
   title: string;
   listingStatus: 'for-sale' | 'for-rent' | 'sold' | 'leased' | 'off-market';
-  pricing: {
-    type: 'fixed' | 'poa';
+  pricing?: {
+    isHidden?: boolean | null;
+    type?: ('fixed' | 'poa') | null;
     amount?: number | null;
     period?: ('total' | 'week' | 'month') | null;
     currency?: string | null;
   };
   address: {
-    street: string;
+    street?: string | null;
     suburb?: string | null;
     state: 'NSW' | 'VIC' | 'QLD' | 'WA' | 'SA' | 'TAS' | 'ACT' | 'NT';
     postcode: string;
@@ -905,7 +906,7 @@ export interface Listing {
   /**
    * The size of the property in square meters or acres. Eg. 450sqm or 1.2 acres
    */
-  size: string;
+  size?: string | null;
   parking?: number | null;
   'Additional Features'?:
     | {
@@ -913,7 +914,7 @@ export interface Listing {
         id?: string | null;
       }[]
     | null;
-  description: {
+  description?: {
     root: {
       type: string;
       children: {
@@ -927,7 +928,7 @@ export interface Listing {
       version: number;
     };
     [k: string]: unknown;
-  };
+  } | null;
   coverImage: string | Media;
   gallery?:
     | {
@@ -1678,6 +1679,7 @@ export interface ListingsSelect<T extends boolean = true> {
   pricing?:
     | T
     | {
+        isHidden?: T;
         type?: T;
         amount?: T;
         period?: T;
@@ -2110,6 +2112,7 @@ export interface Contact {
     postcode?: string | null;
     country?: string | null;
   };
+  contactForm?: (string | null) | Form;
   updatedAt?: string | null;
   createdAt?: string | null;
 }
@@ -2179,6 +2182,7 @@ export interface ContactSelect<T extends boolean = true> {
         postcode?: T;
         country?: T;
       };
+  contactForm?: T;
   updatedAt?: T;
   createdAt?: T;
   globalType?: T;
@@ -2208,6 +2212,17 @@ export interface TaskSchedulePublish {
     user?: (string | null) | User;
   };
   output?: unknown;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "Contact Block".
+ */
+export interface ContactBlock {
+  type?: ('phone' | 'email' | 'address') | null;
+  value?: string | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'contact';
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema

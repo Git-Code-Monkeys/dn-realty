@@ -29,7 +29,9 @@ export const TeamMember: React.FC<TeamMemberType> = (props) => {
               <h3 className="text-2xl font-semibold">{name}</h3>
               <span className="text-gray-500 dark:text-gray-400">|</span>
               <p className="text-sm text-gray-600 dark:text-gray-500">{role}</p>
-              <span className="text-gray-500 dark:text-gray-400">|</span>
+              {socialLinks && socialLinks.length > 0 && (
+                <span className="text-gray-500 dark:text-gray-400">|</span>
+              )}
               <div className="flex gap-2">
                 {socialLinks?.map((link) => (
                   <SocialMedia key={link.id} {...link} />

@@ -300,16 +300,6 @@ export const home: (args: HomeArgs) => RequiredDataFromCollectionSlug<'pages'> =
                     textStyle: '',
                     textFormat: 0,
                   },
-                  {
-                    type: 'paragraph',
-                    format: '',
-                    indent: 0,
-                    version: 1,
-                    children: [],
-                    direction: null,
-                    textStyle: '',
-                    textFormat: 0,
-                  },
                 ],
                 direction: 'ltr',
               },
@@ -327,7 +317,7 @@ export const home: (args: HomeArgs) => RequiredDataFromCollectionSlug<'pages'> =
               },
               url: '/about#services',
               label: 'All Services',
-              appearance: 'default',
+              appearance: 'outline',
             },
           },
           {
@@ -603,6 +593,7 @@ export const home: (args: HomeArgs) => RequiredDataFromCollectionSlug<'pages'> =
       },
       {
         blockType: 'listingGroup',
+        blockName: 'Featured Listings',
         introContent: {
           root: {
             type: 'root',
@@ -652,20 +643,18 @@ export const home: (args: HomeArgs) => RequiredDataFromCollectionSlug<'pages'> =
                 textStyle: '',
                 textFormat: 0,
               },
-
-              {
-                type: 'paragraph',
-                format: '',
-                indent: 0,
-                version: 1,
-                children: [],
-                direction: null,
-                textStyle: '',
-                textFormat: 0,
-              },
             ],
             direction: null,
           },
+        },
+        enableLink: true,
+        link: {
+          type: 'custom',
+          newTab: null,
+
+          url: '/listings',
+          label: 'Explore more listings',
+          appearance: 'outline',
         },
         listingGroup: listingGroups.featuredListingGroupId,
       },
@@ -940,9 +929,9 @@ export const home: (args: HomeArgs) => RequiredDataFromCollectionSlug<'pages'> =
       },
     ],
     meta: {
-      description: 'DN Realty - Your Trusted Real Estate Partner in South Western Sydney',
+      description: 'Your Trusted Real Estate Partner in South Western Sydney',
       image: heroImage.id,
-      title: 'DN Realty - Your Trusted Real Estate Partner in South Western Sydney',
+      title: 'Home',
     },
     title: 'Home',
   }

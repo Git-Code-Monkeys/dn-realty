@@ -49,6 +49,26 @@ const mediaMetadata = [
     name: 'service-leasing.png',
     alt: 'Service leasing image',
   },
+  {
+    name: 'contact-hero-banner.jpg',
+    alt: 'Contact hero banner',
+  },
+  {
+    name: 'extra-2-se-of-12th-cover.jpg',
+    alt: 'Extra 2 SE of 12th cover',
+  },
+  {
+    name: '157-bloom-blvd-cover.jpg',
+    alt: '157 Bloom Blvd cover',
+  },
+  {
+    name: '2467-monarch-ave-unit-3-cover.jpg',
+    alt: '2467 Monarch Ave Unit 3 cover',
+  },
+  {
+    name: '22-great-western-highway-cover.jpg',
+    alt: '22 Great Western Highway cover',
+  },
 ] as const
 
 export type MediaName = (typeof mediaMetadata)[number]['name']

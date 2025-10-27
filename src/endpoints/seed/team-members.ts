@@ -16,7 +16,7 @@ export const teamMembers: (
       role: 'Owner',
       phone: '(+61) 0433 738 027',
       email: 'admin@dnrealty.com.au',
-      image: mediaMap.get('about-intro.jpg')?.id as string,
+      image: null,
       bio: {
         root: {
           type: 'root',
@@ -34,7 +34,49 @@ export const teamMembers: (
               children: [
                 {
                   mode: 'normal',
-                  text: 'some bio',
+                  text: 'Danny Nath, the driving force behind DN Realty, brings over 18 years of real estate expertise to the table.',
+                  type: 'text',
+                  style: '',
+                  detail: 0,
+                  format: 0,
+                  version: 1,
+                },
+              ],
+              direction: null,
+              textStyle: '',
+              textFormat: 0,
+            },
+            {
+              type: 'paragraph',
+              format: '',
+              indent: 0,
+              version: 1,
+
+              children: [
+                {
+                  mode: 'normal',
+                  text: 'As the Owner and Director, Danny’s extensive experience and deep market knowledge set the standard for excellence. His passion for real estate and commitment to client success have made him a trusted name in the industry, guiding clients through their property journeys with unmatched professionalism and care. ',
+                  type: 'text',
+                  style: '',
+                  detail: 0,
+                  format: 0,
+                  version: 1,
+                },
+              ],
+              direction: null,
+              textStyle: '',
+              textFormat: 0,
+            },
+            {
+              type: 'paragraph',
+              format: '',
+              indent: 0,
+              version: 1,
+
+              children: [
+                {
+                  mode: 'normal',
+                  text: 'Whether you are buying, selling or looking for an experienced agent to manage your property Danny is just a phone call away.',
                   type: 'text',
                   style: '',
                   detail: 0,
@@ -50,12 +92,7 @@ export const teamMembers: (
           direction: null,
         },
       },
-      socialLinks: [
-        {
-          url: 'https://youtube.com',
-          socialMedia: 'youtube',
-        },
-      ],
+      socialLinks: [],
     },
   ]
 }

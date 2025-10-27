@@ -1,9 +1,11 @@
 import { ListingType, Media } from '@/payload-types'
 import { RequiredDataFromCollectionSlug } from 'payload'
+import { ListingTypeSlug } from './listing-types'
+import { MediaName } from './media'
 
 type ListingsArgs = {
-  mediaMap: Map<string | null | undefined, Media>
-  listingTypesMap: Map<string | null | undefined, ListingType>
+  mediaMap: Map<MediaName | null | undefined, Media>
+  listingTypesMap: Map<ListingTypeSlug | null | undefined, ListingType>
 }
 
 export const listings: (args: ListingsArgs) => RequiredDataFromCollectionSlug<'listings'>[] = ({
@@ -17,6 +19,7 @@ export const listings: (args: ListingsArgs) => RequiredDataFromCollectionSlug<'l
       _status: 'published',
       title: '4692 Divi Way',
       pricing: {
+        isHidden: false,
         type: 'fixed',
         amount: 650000,
         period: 'total',
@@ -198,6 +201,111 @@ export const listings: (args: ListingsArgs) => RequiredDataFromCollectionSlug<'l
       coverImage: mediaMap.get('4692-divi-way-cover.jpg')?.id as string,
       listingStatus: 'for-sale',
       gallery: [],
+    },
+    {
+      slug: '2467-monarch-ave-unit-3',
+      slugLock: true,
+      _status: 'published',
+      title: '2467 Monarch Ave Unit 3',
+      pricing: {
+        isHidden: false,
+        type: 'fixed',
+        amount: 2800,
+        period: 'month',
+        currency: 'AUD',
+      },
+      address: {
+        street: 'Carmel',
+        suburb: 'CA',
+        postcode: '93940',
+        state: 'NSW',
+      },
+      listingType: listingTypesMap.get('house')?.id as string,
+      bedrooms: 3,
+      bathrooms: 1,
+      size: '2,000 sqft',
+      listingStatus: 'for-sale',
+      coverImage: mediaMap.get('2467-monarch-ave-unit-3-cover.jpg')?.id as string,
+      gallery: [],
+      description: null,
+    },
+    {
+      title: '157 Bloom Blvd',
+      slug: '157-bloom-blvd',
+      slugLock: true,
+      _status: 'published',
+      pricing: {
+        isHidden: false,
+        type: 'fixed',
+        amount: 650000,
+        period: 'total',
+        currency: 'AUD',
+      },
+      address: {
+        street: 'Carmel',
+        suburb: 'CA',
+        postcode: '93923',
+        state: 'WA',
+      },
+      listingType: listingTypesMap.get('house')?.id as string,
+      bedrooms: 3,
+      bathrooms: 1,
+      size: '2,000 sqft',
+      listingStatus: 'for-sale',
+      coverImage: mediaMap.get('157-bloom-blvd-cover.jpg')?.id as string,
+      gallery: [],
+      description: null,
+    },
+    {
+      title: 'Extra 2 SE of 12th',
+      slug: 'extra-2-se-of-12th',
+      slugLock: true,
+      _status: 'published',
+      pricing: {
+        isHidden: false,
+        type: 'fixed',
+        amount: 1200000,
+        period: 'total',
+        currency: 'AUD',
+      },
+      address: {
+        street: 'San Jose',
+        suburb: 'CA',
+        postcode: '93921',
+        state: 'NSW',
+      },
+      listingType: listingTypesMap.get('house')?.id as string,
+      bedrooms: 3,
+      bathrooms: 3.5,
+      size: '3,886 sqft',
+      listingStatus: 'for-sale',
+      coverImage: mediaMap.get('extra-2-se-of-12th-cover.jpg')?.id as string,
+      gallery: [],
+      description: null,
+    },
+    {
+      title: '22 Great Western Highway',
+      slug: '22-great-western-highway',
+      slugLock: true,
+      _status: 'published',
+      pricing: {
+        isHidden: true,
+      },
+      address: {
+        street: '',
+        suburb: 'Parramatta',
+        postcode: '2150',
+        state: 'NSW',
+      },
+      listingType: listingTypesMap.get('house')?.id as string,
+      bedrooms: 1,
+      bathrooms: 1,
+      parking: 1,
+      size: null,
+      listingStatus: 'for-sale',
+      coverImage: mediaMap.get('22-great-western-highway-cover.jpg')?.id as string,
+      gallery: [],
+      description: null,
     },
   ]
 }

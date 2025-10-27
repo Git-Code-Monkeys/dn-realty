@@ -1,7 +1,7 @@
 import Script from 'next/script'
 import React from 'react'
 
-import { defaultTheme, themeLocalStorageKey } from '../ThemeSelector/types'
+import { defaultTheme, themeLocalStorageKey } from '../shared'
 
 export const InitTheme: React.FC = () => {
   return (
@@ -9,39 +9,39 @@ export const InitTheme: React.FC = () => {
     <Script
       dangerouslySetInnerHTML={{
         __html: `
-  (function () {
-    function getImplicitPreference() {
-      var mediaQuery = '(prefers-color-scheme: dark)'
-      var mql = window.matchMedia(mediaQuery)
-      var hasImplicitPreference = typeof mql.matches === 'boolean'
+          (function () {
+            function getImplicitPreference() {
+              var mediaQuery = '(prefers-color-scheme: dark)'
+              var mql = window.matchMedia(mediaQuery)
+              var hasImplicitPreference = typeof mql.matches === 'boolean'
 
-      if (hasImplicitPreference) {
-        return mql.matches ? 'dark' : 'light'
-      }
+              if (hasImplicitPreference) {
+                return mql.matches ? 'dark' : 'light'
+              }
 
-      return null
-    }
+              return null
+            }
 
-    function themeIsValid(theme) {
-      return theme === 'light' || theme === 'dark'
-    }
+            function themeIsValid(theme) {
+              return theme === 'light' || theme === 'dark'
+            }
 
-    var themeToSet = '${defaultTheme}'
-    var preference = window.localStorage.getItem('${themeLocalStorageKey}')
+            var themeToSet = '${defaultTheme}'
+            var preference = window.localStorage.getItem('${themeLocalStorageKey}')
 
-    if (themeIsValid(preference)) {
-      themeToSet = preference
-    } else {
-      var implicitPreference = getImplicitPreference()
+            if (themeIsValid(preference)) {
+              themeToSet = preference
+            } else {
+              var implicitPreference = getImplicitPreference()
 
-      if (implicitPreference) {
-        themeToSet = implicitPreference
-      }
-    }
+              if (implicitPreference) {
+                themeToSet = implicitPreference
+              }
+            }
 
-    document.documentElement.setAttribute('data-theme', themeToSet)
-  })();
-  `,
+            document.documentElement.setAttribute('data-theme', themeToSet)
+          })();
+        `,
       }}
       id="theme-script"
       strategy="beforeInteractive"

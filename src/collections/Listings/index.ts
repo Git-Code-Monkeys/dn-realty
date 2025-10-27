@@ -71,6 +71,12 @@ const Listings: CollectionConfig = {
               type: 'group',
               fields: [
                 {
+                  name: 'isHidden',
+                  type: 'checkbox',
+                  label: 'Hide price from public',
+                  defaultValue: false,
+                },
+                {
                   name: 'type',
                   type: 'select',
                   options: [
@@ -79,14 +85,17 @@ const Listings: CollectionConfig = {
                   ],
                   required: true,
                   defaultValue: 'fixed',
+                  admin: {
+                    condition: (_, siblingData) => !siblingData?.isHidden,
+                  },
                 },
                 {
                   name: 'amount',
                   type: 'number',
                   required: false,
                   admin: {
-                    condition: (data) => {
-                      return data?.pricing?.type === 'fixed'
+                    condition: (_, siblingData) => {
+                      return siblingData?.type === 'fixed' && !siblingData?.isHidden
                     },
                   },
                 },
@@ -99,11 +108,17 @@ const Listings: CollectionConfig = {
                     { label: 'Per Month', value: 'month' },
                   ],
                   defaultValue: 'total',
+                  admin: {
+                    condition: (_, siblingData) => !siblingData?.isHidden,
+                  },
                 },
                 {
                   name: 'currency',
                   type: 'text',
                   defaultValue: 'AUD',
+                  admin: {
+                    condition: (_, siblingData) => !siblingData?.isHidden,
+                  },
                 },
               ],
             },
@@ -112,7 +127,7 @@ const Listings: CollectionConfig = {
               name: 'address',
               type: 'group',
               fields: [
-                { name: 'street', type: 'text', required: true },
+                { name: 'street', type: 'text', required: false },
                 { name: 'suburb', label: 'Suburb / City', type: 'text', required: false },
                 {
                   name: 'state',
@@ -163,7 +178,7 @@ const Listings: CollectionConfig = {
             {
               name: 'size',
               type: 'text', // "450sqm" or "1.2 acres"
-              required: true,
+              required: false,
               admin: {
                 description:
                   'The size of the property in square meters or acres. Eg. 450sqm or 1.2 acres',
@@ -191,7 +206,7 @@ const Listings: CollectionConfig = {
             {
               name: 'description',
               type: 'richText',
-              required: true,
+              required: false,
             },
           ],
         },

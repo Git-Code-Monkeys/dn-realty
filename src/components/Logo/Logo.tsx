@@ -1,5 +1,4 @@
 import clsx from 'clsx'
-import React from 'react'
 
 interface Props {
   className?: string
@@ -22,7 +21,10 @@ export const Logo = (props: Props) => {
       loading={loading}
       fetchPriority={priority}
       decoding="async"
-      className={clsx('w-full h-20 py-1 px-4 rounded-lg bg-white', className)}
+      className={clsx(
+        'w-full h-16 py-1 rounded-lg bg-transparent dark:brightness-0 dark:invert',
+        className,
+      )}
       src="/logo.png"
     />
   )

@@ -3,25 +3,37 @@ import { MigrateUpArgs, MigrateDownArgs, sql } from '@payloadcms/db-postgres'
 export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   await db.execute(sql`
    CREATE TYPE "public"."enum_pages_hero_links_link_type" AS ENUM('reference', 'custom');
-  CREATE TYPE "public"."enum_pages_hero_links_link_appearance" AS ENUM('default', 'outline');
+  CREATE TYPE "public"."enum_pages_hero_links_link_appearance" AS ENUM('default', 'outline', 'inline', 'link', 'ghost', 'destructive');
   CREATE TYPE "public"."enum_pages_blocks_cta_links_link_type" AS ENUM('reference', 'custom');
   CREATE TYPE "public"."enum_pages_blocks_cta_links_link_appearance" AS ENUM('default', 'outline');
+  CREATE TYPE "public"."enum_pages_blocks_carousel_size" AS ENUM('oneThird', 'half', 'twoThirds', 'full');
+  CREATE TYPE "public"."enum_pages_blocks_carousel_link_type" AS ENUM('reference', 'custom');
+  CREATE TYPE "public"."enum_pages_blocks_carousel_link_appearance" AS ENUM('default', 'outline', 'inline', 'link', 'ghost', 'destructive');
+  CREATE TYPE "public"."enum_pages_blocks_carousel_type" AS ENUM('general', 'testimonial');
   CREATE TYPE "public"."enum_pages_blocks_content_columns_size" AS ENUM('oneThird', 'half', 'twoThirds', 'full');
   CREATE TYPE "public"."enum_pages_blocks_content_columns_link_type" AS ENUM('reference', 'custom');
-  CREATE TYPE "public"."enum_pages_blocks_content_columns_link_appearance" AS ENUM('default', 'outline');
+  CREATE TYPE "public"."enum_pages_blocks_content_columns_link_appearance" AS ENUM('default', 'outline', 'inline', 'link', 'ghost', 'destructive');
   CREATE TYPE "public"."enum_pages_blocks_archive_populate_by" AS ENUM('collection', 'selection');
   CREATE TYPE "public"."enum_pages_blocks_archive_relation_to" AS ENUM('posts');
+  CREATE TYPE "public"."enum_pages_blocks_listing_group_link_type" AS ENUM('reference', 'custom');
+  CREATE TYPE "public"."enum_pages_blocks_listing_group_link_appearance" AS ENUM('default', 'outline', 'inline', 'link', 'ghost', 'destructive');
   CREATE TYPE "public"."enum_pages_hero_type" AS ENUM('none', 'highImpact', 'mediumImpact', 'lowImpact');
   CREATE TYPE "public"."enum_pages_status" AS ENUM('draft', 'published');
   CREATE TYPE "public"."enum__pages_v_version_hero_links_link_type" AS ENUM('reference', 'custom');
-  CREATE TYPE "public"."enum__pages_v_version_hero_links_link_appearance" AS ENUM('default', 'outline');
+  CREATE TYPE "public"."enum__pages_v_version_hero_links_link_appearance" AS ENUM('default', 'outline', 'inline', 'link', 'ghost', 'destructive');
   CREATE TYPE "public"."enum__pages_v_blocks_cta_links_link_type" AS ENUM('reference', 'custom');
   CREATE TYPE "public"."enum__pages_v_blocks_cta_links_link_appearance" AS ENUM('default', 'outline');
+  CREATE TYPE "public"."enum__pages_v_blocks_carousel_size" AS ENUM('oneThird', 'half', 'twoThirds', 'full');
+  CREATE TYPE "public"."enum__pages_v_blocks_carousel_link_type" AS ENUM('reference', 'custom');
+  CREATE TYPE "public"."enum__pages_v_blocks_carousel_link_appearance" AS ENUM('default', 'outline', 'inline', 'link', 'ghost', 'destructive');
+  CREATE TYPE "public"."enum__pages_v_blocks_carousel_type" AS ENUM('general', 'testimonial');
   CREATE TYPE "public"."enum__pages_v_blocks_content_columns_size" AS ENUM('oneThird', 'half', 'twoThirds', 'full');
   CREATE TYPE "public"."enum__pages_v_blocks_content_columns_link_type" AS ENUM('reference', 'custom');
-  CREATE TYPE "public"."enum__pages_v_blocks_content_columns_link_appearance" AS ENUM('default', 'outline');
+  CREATE TYPE "public"."enum__pages_v_blocks_content_columns_link_appearance" AS ENUM('default', 'outline', 'inline', 'link', 'ghost', 'destructive');
   CREATE TYPE "public"."enum__pages_v_blocks_archive_populate_by" AS ENUM('collection', 'selection');
   CREATE TYPE "public"."enum__pages_v_blocks_archive_relation_to" AS ENUM('posts');
+  CREATE TYPE "public"."enum__pages_v_blocks_listing_group_link_type" AS ENUM('reference', 'custom');
+  CREATE TYPE "public"."enum__pages_v_blocks_listing_group_link_appearance" AS ENUM('default', 'outline', 'inline', 'link', 'ghost', 'destructive');
   CREATE TYPE "public"."enum__pages_v_version_hero_type" AS ENUM('none', 'highImpact', 'mediumImpact', 'lowImpact');
   CREATE TYPE "public"."enum__pages_v_version_status" AS ENUM('draft', 'published');
   CREATE TYPE "public"."enum_posts_status" AS ENUM('draft', 'published');
@@ -37,6 +49,7 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   CREATE TYPE "public"."enum__listings_v_version_pricing_period" AS ENUM('total', 'week', 'month');
   CREATE TYPE "public"."enum__listings_v_version_address_state" AS ENUM('NSW', 'VIC', 'QLD', 'WA', 'SA', 'TAS', 'ACT', 'NT');
   CREATE TYPE "public"."enum__listings_v_version_status" AS ENUM('draft', 'published');
+  CREATE TYPE "public"."enum_team_members_social_links_social_media" AS ENUM('facebook', 'instagram', 'x', 'linkedin', 'tiktok', 'youtube');
   CREATE TYPE "public"."enum_redirects_to_type" AS ENUM('reference', 'custom');
   CREATE TYPE "public"."enum_forms_confirmation_type" AS ENUM('message', 'redirect');
   CREATE TYPE "public"."enum_payload_jobs_log_task_slug" AS ENUM('inline', 'schedulePublish');
@@ -44,6 +57,7 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   CREATE TYPE "public"."enum_payload_jobs_task_slug" AS ENUM('inline', 'schedulePublish');
   CREATE TYPE "public"."enum_header_nav_items_link_type" AS ENUM('reference', 'custom');
   CREATE TYPE "public"."enum_footer_nav_items_link_type" AS ENUM('reference', 'custom');
+  CREATE TYPE "public"."enum_contact_office_address_state" AS ENUM('NSW', 'VIC', 'QLD', 'WA', 'SA', 'TAS', 'ACT', 'NT');
   CREATE TABLE "pages_hero_links" (
   	"_order" integer NOT NULL,
   	"_parent_id" uuid NOT NULL,
@@ -72,6 +86,30 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   	"_path" text NOT NULL,
   	"id" varchar PRIMARY KEY NOT NULL,
   	"rich_text" jsonb,
+  	"block_name" varchar
+  );
+  
+  CREATE TABLE "pages_blocks_carousel_items" (
+  	"_order" integer NOT NULL,
+  	"_parent_id" varchar NOT NULL,
+  	"id" varchar PRIMARY KEY NOT NULL,
+  	"rich_text" jsonb
+  );
+  
+  CREATE TABLE "pages_blocks_carousel" (
+  	"_order" integer NOT NULL,
+  	"_parent_id" uuid NOT NULL,
+  	"_path" text NOT NULL,
+  	"id" varchar PRIMARY KEY NOT NULL,
+  	"size" "enum_pages_blocks_carousel_size" DEFAULT 'oneThird',
+  	"rich_text" jsonb,
+  	"enable_link" boolean,
+  	"link_type" "enum_pages_blocks_carousel_link_type" DEFAULT 'reference',
+  	"link_new_tab" boolean,
+  	"link_url" varchar,
+  	"link_label" varchar,
+  	"link_appearance" "enum_pages_blocks_carousel_link_appearance" DEFAULT 'default',
+  	"type" "enum_pages_blocks_carousel_type" DEFAULT 'general',
   	"block_name" varchar
   );
   
@@ -127,6 +165,30 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   	"form_id" uuid,
   	"enable_intro" boolean,
   	"intro_content" jsonb,
+  	"block_name" varchar
+  );
+  
+  CREATE TABLE "pages_blocks_listing_group" (
+  	"_order" integer NOT NULL,
+  	"_parent_id" uuid NOT NULL,
+  	"_path" text NOT NULL,
+  	"id" varchar PRIMARY KEY NOT NULL,
+  	"intro_content" jsonb,
+  	"listing_group_id" uuid,
+  	"enable_link" boolean,
+  	"link_type" "enum_pages_blocks_listing_group_link_type" DEFAULT 'reference',
+  	"link_new_tab" boolean,
+  	"link_url" varchar,
+  	"link_label" varchar,
+  	"link_appearance" "enum_pages_blocks_listing_group_link_appearance" DEFAULT 'default',
+  	"block_name" varchar
+  );
+  
+  CREATE TABLE "pages_blocks_team_info_block" (
+  	"_order" integer NOT NULL,
+  	"_parent_id" uuid NOT NULL,
+  	"_path" text NOT NULL,
+  	"id" varchar PRIMARY KEY NOT NULL,
   	"block_name" varchar
   );
   
@@ -191,6 +253,32 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   	"block_name" varchar
   );
   
+  CREATE TABLE "_pages_v_blocks_carousel_items" (
+  	"_order" integer NOT NULL,
+  	"_parent_id" uuid NOT NULL,
+  	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
+  	"rich_text" jsonb,
+  	"_uuid" varchar
+  );
+  
+  CREATE TABLE "_pages_v_blocks_carousel" (
+  	"_order" integer NOT NULL,
+  	"_parent_id" uuid NOT NULL,
+  	"_path" text NOT NULL,
+  	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
+  	"size" "enum__pages_v_blocks_carousel_size" DEFAULT 'oneThird',
+  	"rich_text" jsonb,
+  	"enable_link" boolean,
+  	"link_type" "enum__pages_v_blocks_carousel_link_type" DEFAULT 'reference',
+  	"link_new_tab" boolean,
+  	"link_url" varchar,
+  	"link_label" varchar,
+  	"link_appearance" "enum__pages_v_blocks_carousel_link_appearance" DEFAULT 'default',
+  	"type" "enum__pages_v_blocks_carousel_type" DEFAULT 'general',
+  	"_uuid" varchar,
+  	"block_name" varchar
+  );
+  
   CREATE TABLE "_pages_v_blocks_content_columns" (
   	"_order" integer NOT NULL,
   	"_parent_id" uuid NOT NULL,
@@ -247,6 +335,32 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   	"form_id" uuid,
   	"enable_intro" boolean,
   	"intro_content" jsonb,
+  	"_uuid" varchar,
+  	"block_name" varchar
+  );
+  
+  CREATE TABLE "_pages_v_blocks_listing_group" (
+  	"_order" integer NOT NULL,
+  	"_parent_id" uuid NOT NULL,
+  	"_path" text NOT NULL,
+  	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
+  	"intro_content" jsonb,
+  	"listing_group_id" uuid,
+  	"enable_link" boolean,
+  	"link_type" "enum__pages_v_blocks_listing_group_link_type" DEFAULT 'reference',
+  	"link_new_tab" boolean,
+  	"link_url" varchar,
+  	"link_label" varchar,
+  	"link_appearance" "enum__pages_v_blocks_listing_group_link_appearance" DEFAULT 'default',
+  	"_uuid" varchar,
+  	"block_name" varchar
+  );
+  
+  CREATE TABLE "_pages_v_blocks_team_info_block" (
+  	"_order" integer NOT NULL,
+  	"_parent_id" uuid NOT NULL,
+  	"_path" text NOT NULL,
+  	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
   	"_uuid" varchar,
   	"block_name" varchar
   );
@@ -462,7 +576,7 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   	"lock_until" timestamp(3) with time zone
   );
   
-  CREATE TABLE "property_types" (
+  CREATE TABLE "listing_types" (
   	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
   	"title" varchar NOT NULL,
   	"description" varchar,
@@ -491,15 +605,16 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
   	"title" varchar,
   	"listing_status" "enum_listings_listing_status" DEFAULT 'for-sale',
+  	"pricing_is_hidden" boolean DEFAULT false,
   	"pricing_type" "enum_listings_pricing_type" DEFAULT 'fixed',
   	"pricing_amount" numeric,
   	"pricing_period" "enum_listings_pricing_period" DEFAULT 'total',
   	"pricing_currency" varchar DEFAULT 'AUD',
   	"address_street" varchar,
   	"address_suburb" varchar,
-  	"address_state" "enum_listings_address_state",
+  	"address_state" "enum_listings_address_state" DEFAULT 'NSW',
   	"address_postcode" varchar,
-  	"property_type_id" uuid,
+  	"listing_type_id" uuid,
   	"bedrooms" numeric,
   	"bathrooms" numeric,
   	"size" varchar,
@@ -538,15 +653,16 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   	"parent_id" uuid,
   	"version_title" varchar,
   	"version_listing_status" "enum__listings_v_version_listing_status" DEFAULT 'for-sale',
+  	"version_pricing_is_hidden" boolean DEFAULT false,
   	"version_pricing_type" "enum__listings_v_version_pricing_type" DEFAULT 'fixed',
   	"version_pricing_amount" numeric,
   	"version_pricing_period" "enum__listings_v_version_pricing_period" DEFAULT 'total',
   	"version_pricing_currency" varchar DEFAULT 'AUD',
   	"version_address_street" varchar,
   	"version_address_suburb" varchar,
-  	"version_address_state" "enum__listings_v_version_address_state",
+  	"version_address_state" "enum__listings_v_version_address_state" DEFAULT 'NSW',
   	"version_address_postcode" varchar,
-  	"version_property_type_id" uuid,
+  	"version_listing_type_id" uuid,
   	"version_bedrooms" numeric,
   	"version_bathrooms" numeric,
   	"version_size" varchar,
@@ -566,6 +682,44 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   	"updated_at" timestamp(3) with time zone DEFAULT now() NOT NULL,
   	"latest" boolean,
   	"autosave" boolean
+  );
+  
+  CREATE TABLE "listing_groups" (
+  	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
+  	"title" varchar NOT NULL,
+  	"slug" varchar,
+  	"slug_lock" boolean DEFAULT true,
+  	"updated_at" timestamp(3) with time zone DEFAULT now() NOT NULL,
+  	"created_at" timestamp(3) with time zone DEFAULT now() NOT NULL
+  );
+  
+  CREATE TABLE "listing_groups_rels" (
+  	"id" serial PRIMARY KEY NOT NULL,
+  	"order" integer,
+  	"parent_id" uuid NOT NULL,
+  	"path" varchar NOT NULL,
+  	"listings_id" uuid
+  );
+  
+  CREATE TABLE "team_members_social_links" (
+  	"_order" integer NOT NULL,
+  	"_parent_id" uuid NOT NULL,
+  	"id" varchar PRIMARY KEY NOT NULL,
+  	"url" varchar NOT NULL,
+  	"social_media" "enum_team_members_social_links_social_media" NOT NULL
+  );
+  
+  CREATE TABLE "team_members" (
+  	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
+  	"_order" varchar,
+  	"name" varchar NOT NULL,
+  	"role" varchar,
+  	"phone" varchar,
+  	"email" varchar,
+  	"image_id" uuid,
+  	"bio" jsonb NOT NULL,
+  	"updated_at" timestamp(3) with time zone DEFAULT now() NOT NULL,
+  	"created_at" timestamp(3) with time zone DEFAULT now() NOT NULL
   );
   
   CREATE TABLE "redirects" (
@@ -819,8 +973,10 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   	"media_id" uuid,
   	"categories_id" uuid,
   	"users_id" uuid,
-  	"property_types_id" uuid,
+  	"listing_types_id" uuid,
   	"listings_id" uuid,
+  	"listing_groups_id" uuid,
+  	"team_members_id" uuid,
   	"redirects_id" uuid,
   	"forms_id" uuid,
   	"form_submissions_id" uuid,
@@ -889,6 +1045,10 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   
   CREATE TABLE "footer" (
   	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
+  	"title" varchar DEFAULT 'DN REALTY | YOUR LOCAL PROPERTY EXPERTS',
+  	"company_tagline" varchar DEFAULT 'DN REALTY BY DANNY NATH',
+  	"rich_text" jsonb,
+  	"privacy_policy_url" varchar,
   	"updated_at" timestamp(3) with time zone,
   	"created_at" timestamp(3) with time zone
   );
@@ -902,9 +1062,25 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   	"posts_id" uuid
   );
   
+  CREATE TABLE "contact" (
+  	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
+  	"phone" varchar,
+  	"email" varchar,
+  	"office_address_street" varchar,
+  	"office_address_suburb" varchar,
+  	"office_address_state" "enum_contact_office_address_state" DEFAULT 'NSW',
+  	"office_address_postcode" varchar,
+  	"office_address_country" varchar DEFAULT 'Australia',
+  	"contact_form_id" uuid,
+  	"updated_at" timestamp(3) with time zone,
+  	"created_at" timestamp(3) with time zone
+  );
+  
   ALTER TABLE "pages_hero_links" ADD CONSTRAINT "pages_hero_links_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."pages"("id") ON DELETE cascade ON UPDATE no action;
   ALTER TABLE "pages_blocks_cta_links" ADD CONSTRAINT "pages_blocks_cta_links_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."pages_blocks_cta"("id") ON DELETE cascade ON UPDATE no action;
   ALTER TABLE "pages_blocks_cta" ADD CONSTRAINT "pages_blocks_cta_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."pages"("id") ON DELETE cascade ON UPDATE no action;
+  ALTER TABLE "pages_blocks_carousel_items" ADD CONSTRAINT "pages_blocks_carousel_items_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."pages_blocks_carousel"("id") ON DELETE cascade ON UPDATE no action;
+  ALTER TABLE "pages_blocks_carousel" ADD CONSTRAINT "pages_blocks_carousel_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."pages"("id") ON DELETE cascade ON UPDATE no action;
   ALTER TABLE "pages_blocks_content_columns" ADD CONSTRAINT "pages_blocks_content_columns_media_id_media_id_fk" FOREIGN KEY ("media_id") REFERENCES "public"."media"("id") ON DELETE set null ON UPDATE no action;
   ALTER TABLE "pages_blocks_content_columns" ADD CONSTRAINT "pages_blocks_content_columns_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."pages_blocks_content"("id") ON DELETE cascade ON UPDATE no action;
   ALTER TABLE "pages_blocks_content" ADD CONSTRAINT "pages_blocks_content_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."pages"("id") ON DELETE cascade ON UPDATE no action;
@@ -913,6 +1089,9 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   ALTER TABLE "pages_blocks_archive" ADD CONSTRAINT "pages_blocks_archive_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."pages"("id") ON DELETE cascade ON UPDATE no action;
   ALTER TABLE "pages_blocks_form_block" ADD CONSTRAINT "pages_blocks_form_block_form_id_forms_id_fk" FOREIGN KEY ("form_id") REFERENCES "public"."forms"("id") ON DELETE set null ON UPDATE no action;
   ALTER TABLE "pages_blocks_form_block" ADD CONSTRAINT "pages_blocks_form_block_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."pages"("id") ON DELETE cascade ON UPDATE no action;
+  ALTER TABLE "pages_blocks_listing_group" ADD CONSTRAINT "pages_blocks_listing_group_listing_group_id_listing_groups_id_fk" FOREIGN KEY ("listing_group_id") REFERENCES "public"."listing_groups"("id") ON DELETE set null ON UPDATE no action;
+  ALTER TABLE "pages_blocks_listing_group" ADD CONSTRAINT "pages_blocks_listing_group_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."pages"("id") ON DELETE cascade ON UPDATE no action;
+  ALTER TABLE "pages_blocks_team_info_block" ADD CONSTRAINT "pages_blocks_team_info_block_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."pages"("id") ON DELETE cascade ON UPDATE no action;
   ALTER TABLE "pages" ADD CONSTRAINT "pages_hero_media_id_media_id_fk" FOREIGN KEY ("hero_media_id") REFERENCES "public"."media"("id") ON DELETE set null ON UPDATE no action;
   ALTER TABLE "pages" ADD CONSTRAINT "pages_meta_image_id_media_id_fk" FOREIGN KEY ("meta_image_id") REFERENCES "public"."media"("id") ON DELETE set null ON UPDATE no action;
   ALTER TABLE "pages_rels" ADD CONSTRAINT "pages_rels_parent_fk" FOREIGN KEY ("parent_id") REFERENCES "public"."pages"("id") ON DELETE cascade ON UPDATE no action;
@@ -922,6 +1101,8 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   ALTER TABLE "_pages_v_version_hero_links" ADD CONSTRAINT "_pages_v_version_hero_links_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."_pages_v"("id") ON DELETE cascade ON UPDATE no action;
   ALTER TABLE "_pages_v_blocks_cta_links" ADD CONSTRAINT "_pages_v_blocks_cta_links_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."_pages_v_blocks_cta"("id") ON DELETE cascade ON UPDATE no action;
   ALTER TABLE "_pages_v_blocks_cta" ADD CONSTRAINT "_pages_v_blocks_cta_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."_pages_v"("id") ON DELETE cascade ON UPDATE no action;
+  ALTER TABLE "_pages_v_blocks_carousel_items" ADD CONSTRAINT "_pages_v_blocks_carousel_items_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."_pages_v_blocks_carousel"("id") ON DELETE cascade ON UPDATE no action;
+  ALTER TABLE "_pages_v_blocks_carousel" ADD CONSTRAINT "_pages_v_blocks_carousel_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."_pages_v"("id") ON DELETE cascade ON UPDATE no action;
   ALTER TABLE "_pages_v_blocks_content_columns" ADD CONSTRAINT "_pages_v_blocks_content_columns_media_id_media_id_fk" FOREIGN KEY ("media_id") REFERENCES "public"."media"("id") ON DELETE set null ON UPDATE no action;
   ALTER TABLE "_pages_v_blocks_content_columns" ADD CONSTRAINT "_pages_v_blocks_content_columns_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."_pages_v_blocks_content"("id") ON DELETE cascade ON UPDATE no action;
   ALTER TABLE "_pages_v_blocks_content" ADD CONSTRAINT "_pages_v_blocks_content_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."_pages_v"("id") ON DELETE cascade ON UPDATE no action;
@@ -930,6 +1111,9 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   ALTER TABLE "_pages_v_blocks_archive" ADD CONSTRAINT "_pages_v_blocks_archive_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."_pages_v"("id") ON DELETE cascade ON UPDATE no action;
   ALTER TABLE "_pages_v_blocks_form_block" ADD CONSTRAINT "_pages_v_blocks_form_block_form_id_forms_id_fk" FOREIGN KEY ("form_id") REFERENCES "public"."forms"("id") ON DELETE set null ON UPDATE no action;
   ALTER TABLE "_pages_v_blocks_form_block" ADD CONSTRAINT "_pages_v_blocks_form_block_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."_pages_v"("id") ON DELETE cascade ON UPDATE no action;
+  ALTER TABLE "_pages_v_blocks_listing_group" ADD CONSTRAINT "_pages_v_blocks_listing_group_listing_group_id_listing_groups_id_fk" FOREIGN KEY ("listing_group_id") REFERENCES "public"."listing_groups"("id") ON DELETE set null ON UPDATE no action;
+  ALTER TABLE "_pages_v_blocks_listing_group" ADD CONSTRAINT "_pages_v_blocks_listing_group_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."_pages_v"("id") ON DELETE cascade ON UPDATE no action;
+  ALTER TABLE "_pages_v_blocks_team_info_block" ADD CONSTRAINT "_pages_v_blocks_team_info_block_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."_pages_v"("id") ON DELETE cascade ON UPDATE no action;
   ALTER TABLE "_pages_v" ADD CONSTRAINT "_pages_v_parent_id_pages_id_fk" FOREIGN KEY ("parent_id") REFERENCES "public"."pages"("id") ON DELETE set null ON UPDATE no action;
   ALTER TABLE "_pages_v" ADD CONSTRAINT "_pages_v_version_hero_media_id_media_id_fk" FOREIGN KEY ("version_hero_media_id") REFERENCES "public"."media"("id") ON DELETE set null ON UPDATE no action;
   ALTER TABLE "_pages_v" ADD CONSTRAINT "_pages_v_version_meta_image_id_media_id_fk" FOREIGN KEY ("version_meta_image_id") REFERENCES "public"."media"("id") ON DELETE set null ON UPDATE no action;
@@ -957,20 +1141,24 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   ALTER TABLE "categories" ADD CONSTRAINT "categories_parent_id_categories_id_fk" FOREIGN KEY ("parent_id") REFERENCES "public"."categories"("id") ON DELETE set null ON UPDATE no action;
   ALTER TABLE "users_roles" ADD CONSTRAINT "users_roles_parent_fk" FOREIGN KEY ("parent_id") REFERENCES "public"."users"("id") ON DELETE cascade ON UPDATE no action;
   ALTER TABLE "users_sessions" ADD CONSTRAINT "users_sessions_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."users"("id") ON DELETE cascade ON UPDATE no action;
-  ALTER TABLE "property_types" ADD CONSTRAINT "property_types_icon_id_media_id_fk" FOREIGN KEY ("icon_id") REFERENCES "public"."media"("id") ON DELETE set null ON UPDATE no action;
+  ALTER TABLE "listing_types" ADD CONSTRAINT "listing_types_icon_id_media_id_fk" FOREIGN KEY ("icon_id") REFERENCES "public"."media"("id") ON DELETE set null ON UPDATE no action;
   ALTER TABLE "listings_additional_features" ADD CONSTRAINT "listings_additional_features_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."listings"("id") ON DELETE cascade ON UPDATE no action;
   ALTER TABLE "listings_gallery" ADD CONSTRAINT "listings_gallery_image_id_media_id_fk" FOREIGN KEY ("image_id") REFERENCES "public"."media"("id") ON DELETE set null ON UPDATE no action;
   ALTER TABLE "listings_gallery" ADD CONSTRAINT "listings_gallery_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."listings"("id") ON DELETE cascade ON UPDATE no action;
-  ALTER TABLE "listings" ADD CONSTRAINT "listings_property_type_id_property_types_id_fk" FOREIGN KEY ("property_type_id") REFERENCES "public"."property_types"("id") ON DELETE set null ON UPDATE no action;
+  ALTER TABLE "listings" ADD CONSTRAINT "listings_listing_type_id_listing_types_id_fk" FOREIGN KEY ("listing_type_id") REFERENCES "public"."listing_types"("id") ON DELETE set null ON UPDATE no action;
   ALTER TABLE "listings" ADD CONSTRAINT "listings_cover_image_id_media_id_fk" FOREIGN KEY ("cover_image_id") REFERENCES "public"."media"("id") ON DELETE set null ON UPDATE no action;
   ALTER TABLE "listings" ADD CONSTRAINT "listings_meta_image_id_media_id_fk" FOREIGN KEY ("meta_image_id") REFERENCES "public"."media"("id") ON DELETE set null ON UPDATE no action;
   ALTER TABLE "_listings_v_version_additional_features" ADD CONSTRAINT "_listings_v_version_additional_features_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."_listings_v"("id") ON DELETE cascade ON UPDATE no action;
   ALTER TABLE "_listings_v_version_gallery" ADD CONSTRAINT "_listings_v_version_gallery_image_id_media_id_fk" FOREIGN KEY ("image_id") REFERENCES "public"."media"("id") ON DELETE set null ON UPDATE no action;
   ALTER TABLE "_listings_v_version_gallery" ADD CONSTRAINT "_listings_v_version_gallery_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."_listings_v"("id") ON DELETE cascade ON UPDATE no action;
   ALTER TABLE "_listings_v" ADD CONSTRAINT "_listings_v_parent_id_listings_id_fk" FOREIGN KEY ("parent_id") REFERENCES "public"."listings"("id") ON DELETE set null ON UPDATE no action;
-  ALTER TABLE "_listings_v" ADD CONSTRAINT "_listings_v_version_property_type_id_property_types_id_fk" FOREIGN KEY ("version_property_type_id") REFERENCES "public"."property_types"("id") ON DELETE set null ON UPDATE no action;
+  ALTER TABLE "_listings_v" ADD CONSTRAINT "_listings_v_version_listing_type_id_listing_types_id_fk" FOREIGN KEY ("version_listing_type_id") REFERENCES "public"."listing_types"("id") ON DELETE set null ON UPDATE no action;
   ALTER TABLE "_listings_v" ADD CONSTRAINT "_listings_v_version_cover_image_id_media_id_fk" FOREIGN KEY ("version_cover_image_id") REFERENCES "public"."media"("id") ON DELETE set null ON UPDATE no action;
   ALTER TABLE "_listings_v" ADD CONSTRAINT "_listings_v_version_meta_image_id_media_id_fk" FOREIGN KEY ("version_meta_image_id") REFERENCES "public"."media"("id") ON DELETE set null ON UPDATE no action;
+  ALTER TABLE "listing_groups_rels" ADD CONSTRAINT "listing_groups_rels_parent_fk" FOREIGN KEY ("parent_id") REFERENCES "public"."listing_groups"("id") ON DELETE cascade ON UPDATE no action;
+  ALTER TABLE "listing_groups_rels" ADD CONSTRAINT "listing_groups_rels_listings_fk" FOREIGN KEY ("listings_id") REFERENCES "public"."listings"("id") ON DELETE cascade ON UPDATE no action;
+  ALTER TABLE "team_members_social_links" ADD CONSTRAINT "team_members_social_links_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."team_members"("id") ON DELETE cascade ON UPDATE no action;
+  ALTER TABLE "team_members" ADD CONSTRAINT "team_members_image_id_media_id_fk" FOREIGN KEY ("image_id") REFERENCES "public"."media"("id") ON DELETE set null ON UPDATE no action;
   ALTER TABLE "redirects_rels" ADD CONSTRAINT "redirects_rels_parent_fk" FOREIGN KEY ("parent_id") REFERENCES "public"."redirects"("id") ON DELETE cascade ON UPDATE no action;
   ALTER TABLE "redirects_rels" ADD CONSTRAINT "redirects_rels_pages_fk" FOREIGN KEY ("pages_id") REFERENCES "public"."pages"("id") ON DELETE cascade ON UPDATE no action;
   ALTER TABLE "redirects_rels" ADD CONSTRAINT "redirects_rels_posts_fk" FOREIGN KEY ("posts_id") REFERENCES "public"."posts"("id") ON DELETE cascade ON UPDATE no action;
@@ -998,8 +1186,10 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   ALTER TABLE "payload_locked_documents_rels" ADD CONSTRAINT "payload_locked_documents_rels_media_fk" FOREIGN KEY ("media_id") REFERENCES "public"."media"("id") ON DELETE cascade ON UPDATE no action;
   ALTER TABLE "payload_locked_documents_rels" ADD CONSTRAINT "payload_locked_documents_rels_categories_fk" FOREIGN KEY ("categories_id") REFERENCES "public"."categories"("id") ON DELETE cascade ON UPDATE no action;
   ALTER TABLE "payload_locked_documents_rels" ADD CONSTRAINT "payload_locked_documents_rels_users_fk" FOREIGN KEY ("users_id") REFERENCES "public"."users"("id") ON DELETE cascade ON UPDATE no action;
-  ALTER TABLE "payload_locked_documents_rels" ADD CONSTRAINT "payload_locked_documents_rels_property_types_fk" FOREIGN KEY ("property_types_id") REFERENCES "public"."property_types"("id") ON DELETE cascade ON UPDATE no action;
+  ALTER TABLE "payload_locked_documents_rels" ADD CONSTRAINT "payload_locked_documents_rels_listing_types_fk" FOREIGN KEY ("listing_types_id") REFERENCES "public"."listing_types"("id") ON DELETE cascade ON UPDATE no action;
   ALTER TABLE "payload_locked_documents_rels" ADD CONSTRAINT "payload_locked_documents_rels_listings_fk" FOREIGN KEY ("listings_id") REFERENCES "public"."listings"("id") ON DELETE cascade ON UPDATE no action;
+  ALTER TABLE "payload_locked_documents_rels" ADD CONSTRAINT "payload_locked_documents_rels_listing_groups_fk" FOREIGN KEY ("listing_groups_id") REFERENCES "public"."listing_groups"("id") ON DELETE cascade ON UPDATE no action;
+  ALTER TABLE "payload_locked_documents_rels" ADD CONSTRAINT "payload_locked_documents_rels_team_members_fk" FOREIGN KEY ("team_members_id") REFERENCES "public"."team_members"("id") ON DELETE cascade ON UPDATE no action;
   ALTER TABLE "payload_locked_documents_rels" ADD CONSTRAINT "payload_locked_documents_rels_redirects_fk" FOREIGN KEY ("redirects_id") REFERENCES "public"."redirects"("id") ON DELETE cascade ON UPDATE no action;
   ALTER TABLE "payload_locked_documents_rels" ADD CONSTRAINT "payload_locked_documents_rels_forms_fk" FOREIGN KEY ("forms_id") REFERENCES "public"."forms"("id") ON DELETE cascade ON UPDATE no action;
   ALTER TABLE "payload_locked_documents_rels" ADD CONSTRAINT "payload_locked_documents_rels_form_submissions_fk" FOREIGN KEY ("form_submissions_id") REFERENCES "public"."form_submissions"("id") ON DELETE cascade ON UPDATE no action;
@@ -1015,6 +1205,7 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   ALTER TABLE "footer_rels" ADD CONSTRAINT "footer_rels_parent_fk" FOREIGN KEY ("parent_id") REFERENCES "public"."footer"("id") ON DELETE cascade ON UPDATE no action;
   ALTER TABLE "footer_rels" ADD CONSTRAINT "footer_rels_pages_fk" FOREIGN KEY ("pages_id") REFERENCES "public"."pages"("id") ON DELETE cascade ON UPDATE no action;
   ALTER TABLE "footer_rels" ADD CONSTRAINT "footer_rels_posts_fk" FOREIGN KEY ("posts_id") REFERENCES "public"."posts"("id") ON DELETE cascade ON UPDATE no action;
+  ALTER TABLE "contact" ADD CONSTRAINT "contact_contact_form_id_forms_id_fk" FOREIGN KEY ("contact_form_id") REFERENCES "public"."forms"("id") ON DELETE set null ON UPDATE no action;
   CREATE INDEX "pages_hero_links_order_idx" ON "pages_hero_links" USING btree ("_order");
   CREATE INDEX "pages_hero_links_parent_id_idx" ON "pages_hero_links" USING btree ("_parent_id");
   CREATE INDEX "pages_blocks_cta_links_order_idx" ON "pages_blocks_cta_links" USING btree ("_order");
@@ -1022,6 +1213,11 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   CREATE INDEX "pages_blocks_cta_order_idx" ON "pages_blocks_cta" USING btree ("_order");
   CREATE INDEX "pages_blocks_cta_parent_id_idx" ON "pages_blocks_cta" USING btree ("_parent_id");
   CREATE INDEX "pages_blocks_cta_path_idx" ON "pages_blocks_cta" USING btree ("_path");
+  CREATE INDEX "pages_blocks_carousel_items_order_idx" ON "pages_blocks_carousel_items" USING btree ("_order");
+  CREATE INDEX "pages_blocks_carousel_items_parent_id_idx" ON "pages_blocks_carousel_items" USING btree ("_parent_id");
+  CREATE INDEX "pages_blocks_carousel_order_idx" ON "pages_blocks_carousel" USING btree ("_order");
+  CREATE INDEX "pages_blocks_carousel_parent_id_idx" ON "pages_blocks_carousel" USING btree ("_parent_id");
+  CREATE INDEX "pages_blocks_carousel_path_idx" ON "pages_blocks_carousel" USING btree ("_path");
   CREATE INDEX "pages_blocks_content_columns_order_idx" ON "pages_blocks_content_columns" USING btree ("_order");
   CREATE INDEX "pages_blocks_content_columns_parent_id_idx" ON "pages_blocks_content_columns" USING btree ("_parent_id");
   CREATE INDEX "pages_blocks_content_columns_media_idx" ON "pages_blocks_content_columns" USING btree ("media_id");
@@ -1039,6 +1235,13 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   CREATE INDEX "pages_blocks_form_block_parent_id_idx" ON "pages_blocks_form_block" USING btree ("_parent_id");
   CREATE INDEX "pages_blocks_form_block_path_idx" ON "pages_blocks_form_block" USING btree ("_path");
   CREATE INDEX "pages_blocks_form_block_form_idx" ON "pages_blocks_form_block" USING btree ("form_id");
+  CREATE INDEX "pages_blocks_listing_group_order_idx" ON "pages_blocks_listing_group" USING btree ("_order");
+  CREATE INDEX "pages_blocks_listing_group_parent_id_idx" ON "pages_blocks_listing_group" USING btree ("_parent_id");
+  CREATE INDEX "pages_blocks_listing_group_path_idx" ON "pages_blocks_listing_group" USING btree ("_path");
+  CREATE INDEX "pages_blocks_listing_group_listing_group_idx" ON "pages_blocks_listing_group" USING btree ("listing_group_id");
+  CREATE INDEX "pages_blocks_team_info_block_order_idx" ON "pages_blocks_team_info_block" USING btree ("_order");
+  CREATE INDEX "pages_blocks_team_info_block_parent_id_idx" ON "pages_blocks_team_info_block" USING btree ("_parent_id");
+  CREATE INDEX "pages_blocks_team_info_block_path_idx" ON "pages_blocks_team_info_block" USING btree ("_path");
   CREATE INDEX "pages_hero_hero_media_idx" ON "pages" USING btree ("hero_media_id");
   CREATE INDEX "pages_meta_meta_image_idx" ON "pages" USING btree ("meta_image_id");
   CREATE INDEX "pages_slug_idx" ON "pages" USING btree ("slug");
@@ -1058,6 +1261,11 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   CREATE INDEX "_pages_v_blocks_cta_order_idx" ON "_pages_v_blocks_cta" USING btree ("_order");
   CREATE INDEX "_pages_v_blocks_cta_parent_id_idx" ON "_pages_v_blocks_cta" USING btree ("_parent_id");
   CREATE INDEX "_pages_v_blocks_cta_path_idx" ON "_pages_v_blocks_cta" USING btree ("_path");
+  CREATE INDEX "_pages_v_blocks_carousel_items_order_idx" ON "_pages_v_blocks_carousel_items" USING btree ("_order");
+  CREATE INDEX "_pages_v_blocks_carousel_items_parent_id_idx" ON "_pages_v_blocks_carousel_items" USING btree ("_parent_id");
+  CREATE INDEX "_pages_v_blocks_carousel_order_idx" ON "_pages_v_blocks_carousel" USING btree ("_order");
+  CREATE INDEX "_pages_v_blocks_carousel_parent_id_idx" ON "_pages_v_blocks_carousel" USING btree ("_parent_id");
+  CREATE INDEX "_pages_v_blocks_carousel_path_idx" ON "_pages_v_blocks_carousel" USING btree ("_path");
   CREATE INDEX "_pages_v_blocks_content_columns_order_idx" ON "_pages_v_blocks_content_columns" USING btree ("_order");
   CREATE INDEX "_pages_v_blocks_content_columns_parent_id_idx" ON "_pages_v_blocks_content_columns" USING btree ("_parent_id");
   CREATE INDEX "_pages_v_blocks_content_columns_media_idx" ON "_pages_v_blocks_content_columns" USING btree ("media_id");
@@ -1075,6 +1283,13 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   CREATE INDEX "_pages_v_blocks_form_block_parent_id_idx" ON "_pages_v_blocks_form_block" USING btree ("_parent_id");
   CREATE INDEX "_pages_v_blocks_form_block_path_idx" ON "_pages_v_blocks_form_block" USING btree ("_path");
   CREATE INDEX "_pages_v_blocks_form_block_form_idx" ON "_pages_v_blocks_form_block" USING btree ("form_id");
+  CREATE INDEX "_pages_v_blocks_listing_group_order_idx" ON "_pages_v_blocks_listing_group" USING btree ("_order");
+  CREATE INDEX "_pages_v_blocks_listing_group_parent_id_idx" ON "_pages_v_blocks_listing_group" USING btree ("_parent_id");
+  CREATE INDEX "_pages_v_blocks_listing_group_path_idx" ON "_pages_v_blocks_listing_group" USING btree ("_path");
+  CREATE INDEX "_pages_v_blocks_listing_group_listing_group_idx" ON "_pages_v_blocks_listing_group" USING btree ("listing_group_id");
+  CREATE INDEX "_pages_v_blocks_team_info_block_order_idx" ON "_pages_v_blocks_team_info_block" USING btree ("_order");
+  CREATE INDEX "_pages_v_blocks_team_info_block_parent_id_idx" ON "_pages_v_blocks_team_info_block" USING btree ("_parent_id");
+  CREATE INDEX "_pages_v_blocks_team_info_block_path_idx" ON "_pages_v_blocks_team_info_block" USING btree ("_path");
   CREATE INDEX "_pages_v_parent_idx" ON "_pages_v" USING btree ("parent_id");
   CREATE INDEX "_pages_v_version_hero_version_hero_media_idx" ON "_pages_v" USING btree ("version_hero_media_id");
   CREATE INDEX "_pages_v_version_meta_version_meta_image_idx" ON "_pages_v" USING btree ("version_meta_image_id");
@@ -1149,16 +1364,16 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   CREATE INDEX "users_updated_at_idx" ON "users" USING btree ("updated_at");
   CREATE INDEX "users_created_at_idx" ON "users" USING btree ("created_at");
   CREATE UNIQUE INDEX "users_email_idx" ON "users" USING btree ("email");
-  CREATE INDEX "property_types_icon_idx" ON "property_types" USING btree ("icon_id");
-  CREATE INDEX "property_types_slug_idx" ON "property_types" USING btree ("slug");
-  CREATE INDEX "property_types_updated_at_idx" ON "property_types" USING btree ("updated_at");
-  CREATE INDEX "property_types_created_at_idx" ON "property_types" USING btree ("created_at");
+  CREATE INDEX "listing_types_icon_idx" ON "listing_types" USING btree ("icon_id");
+  CREATE INDEX "listing_types_slug_idx" ON "listing_types" USING btree ("slug");
+  CREATE INDEX "listing_types_updated_at_idx" ON "listing_types" USING btree ("updated_at");
+  CREATE INDEX "listing_types_created_at_idx" ON "listing_types" USING btree ("created_at");
   CREATE INDEX "listings_additional_features_order_idx" ON "listings_additional_features" USING btree ("_order");
   CREATE INDEX "listings_additional_features_parent_id_idx" ON "listings_additional_features" USING btree ("_parent_id");
   CREATE INDEX "listings_gallery_order_idx" ON "listings_gallery" USING btree ("_order");
   CREATE INDEX "listings_gallery_parent_id_idx" ON "listings_gallery" USING btree ("_parent_id");
   CREATE INDEX "listings_gallery_image_idx" ON "listings_gallery" USING btree ("image_id");
-  CREATE INDEX "listings_property_type_idx" ON "listings" USING btree ("property_type_id");
+  CREATE INDEX "listings_listing_type_idx" ON "listings" USING btree ("listing_type_id");
   CREATE INDEX "listings_cover_image_idx" ON "listings" USING btree ("cover_image_id");
   CREATE INDEX "listings_meta_meta_image_idx" ON "listings" USING btree ("meta_image_id");
   CREATE INDEX "listings_slug_idx" ON "listings" USING btree ("slug");
@@ -1171,7 +1386,7 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   CREATE INDEX "_listings_v_version_gallery_parent_id_idx" ON "_listings_v_version_gallery" USING btree ("_parent_id");
   CREATE INDEX "_listings_v_version_gallery_image_idx" ON "_listings_v_version_gallery" USING btree ("image_id");
   CREATE INDEX "_listings_v_parent_idx" ON "_listings_v" USING btree ("parent_id");
-  CREATE INDEX "_listings_v_version_version_property_type_idx" ON "_listings_v" USING btree ("version_property_type_id");
+  CREATE INDEX "_listings_v_version_version_listing_type_idx" ON "_listings_v" USING btree ("version_listing_type_id");
   CREATE INDEX "_listings_v_version_version_cover_image_idx" ON "_listings_v" USING btree ("version_cover_image_id");
   CREATE INDEX "_listings_v_version_meta_version_meta_image_idx" ON "_listings_v" USING btree ("version_meta_image_id");
   CREATE INDEX "_listings_v_version_version_slug_idx" ON "_listings_v" USING btree ("version_slug");
@@ -1182,6 +1397,19 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   CREATE INDEX "_listings_v_updated_at_idx" ON "_listings_v" USING btree ("updated_at");
   CREATE INDEX "_listings_v_latest_idx" ON "_listings_v" USING btree ("latest");
   CREATE INDEX "_listings_v_autosave_idx" ON "_listings_v" USING btree ("autosave");
+  CREATE INDEX "listing_groups_slug_idx" ON "listing_groups" USING btree ("slug");
+  CREATE INDEX "listing_groups_updated_at_idx" ON "listing_groups" USING btree ("updated_at");
+  CREATE INDEX "listing_groups_created_at_idx" ON "listing_groups" USING btree ("created_at");
+  CREATE INDEX "listing_groups_rels_order_idx" ON "listing_groups_rels" USING btree ("order");
+  CREATE INDEX "listing_groups_rels_parent_idx" ON "listing_groups_rels" USING btree ("parent_id");
+  CREATE INDEX "listing_groups_rels_path_idx" ON "listing_groups_rels" USING btree ("path");
+  CREATE INDEX "listing_groups_rels_listings_id_idx" ON "listing_groups_rels" USING btree ("listings_id");
+  CREATE INDEX "team_members_social_links_order_idx" ON "team_members_social_links" USING btree ("_order");
+  CREATE INDEX "team_members_social_links_parent_id_idx" ON "team_members_social_links" USING btree ("_parent_id");
+  CREATE INDEX "team_members__order_idx" ON "team_members" USING btree ("_order");
+  CREATE INDEX "team_members_image_idx" ON "team_members" USING btree ("image_id");
+  CREATE INDEX "team_members_updated_at_idx" ON "team_members" USING btree ("updated_at");
+  CREATE INDEX "team_members_created_at_idx" ON "team_members" USING btree ("created_at");
   CREATE UNIQUE INDEX "redirects_from_idx" ON "redirects" USING btree ("from");
   CREATE INDEX "redirects_updated_at_idx" ON "redirects" USING btree ("updated_at");
   CREATE INDEX "redirects_created_at_idx" ON "redirects" USING btree ("created_at");
@@ -1260,8 +1488,10 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   CREATE INDEX "payload_locked_documents_rels_media_id_idx" ON "payload_locked_documents_rels" USING btree ("media_id");
   CREATE INDEX "payload_locked_documents_rels_categories_id_idx" ON "payload_locked_documents_rels" USING btree ("categories_id");
   CREATE INDEX "payload_locked_documents_rels_users_id_idx" ON "payload_locked_documents_rels" USING btree ("users_id");
-  CREATE INDEX "payload_locked_documents_rels_property_types_id_idx" ON "payload_locked_documents_rels" USING btree ("property_types_id");
+  CREATE INDEX "payload_locked_documents_rels_listing_types_id_idx" ON "payload_locked_documents_rels" USING btree ("listing_types_id");
   CREATE INDEX "payload_locked_documents_rels_listings_id_idx" ON "payload_locked_documents_rels" USING btree ("listings_id");
+  CREATE INDEX "payload_locked_documents_rels_listing_groups_id_idx" ON "payload_locked_documents_rels" USING btree ("listing_groups_id");
+  CREATE INDEX "payload_locked_documents_rels_team_members_id_idx" ON "payload_locked_documents_rels" USING btree ("team_members_id");
   CREATE INDEX "payload_locked_documents_rels_redirects_id_idx" ON "payload_locked_documents_rels" USING btree ("redirects_id");
   CREATE INDEX "payload_locked_documents_rels_forms_id_idx" ON "payload_locked_documents_rels" USING btree ("forms_id");
   CREATE INDEX "payload_locked_documents_rels_form_submissions_id_idx" ON "payload_locked_documents_rels" USING btree ("form_submissions_id");
@@ -1289,7 +1519,8 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   CREATE INDEX "footer_rels_parent_idx" ON "footer_rels" USING btree ("parent_id");
   CREATE INDEX "footer_rels_path_idx" ON "footer_rels" USING btree ("path");
   CREATE INDEX "footer_rels_pages_id_idx" ON "footer_rels" USING btree ("pages_id");
-  CREATE INDEX "footer_rels_posts_id_idx" ON "footer_rels" USING btree ("posts_id");`)
+  CREATE INDEX "footer_rels_posts_id_idx" ON "footer_rels" USING btree ("posts_id");
+  CREATE INDEX "contact_contact_form_idx" ON "contact" USING btree ("contact_form_id");`)
 }
 
 export async function down({ db, payload, req }: MigrateDownArgs): Promise<void> {
@@ -1297,21 +1528,29 @@ export async function down({ db, payload, req }: MigrateDownArgs): Promise<void>
    DROP TABLE "pages_hero_links" CASCADE;
   DROP TABLE "pages_blocks_cta_links" CASCADE;
   DROP TABLE "pages_blocks_cta" CASCADE;
+  DROP TABLE "pages_blocks_carousel_items" CASCADE;
+  DROP TABLE "pages_blocks_carousel" CASCADE;
   DROP TABLE "pages_blocks_content_columns" CASCADE;
   DROP TABLE "pages_blocks_content" CASCADE;
   DROP TABLE "pages_blocks_media_block" CASCADE;
   DROP TABLE "pages_blocks_archive" CASCADE;
   DROP TABLE "pages_blocks_form_block" CASCADE;
+  DROP TABLE "pages_blocks_listing_group" CASCADE;
+  DROP TABLE "pages_blocks_team_info_block" CASCADE;
   DROP TABLE "pages" CASCADE;
   DROP TABLE "pages_rels" CASCADE;
   DROP TABLE "_pages_v_version_hero_links" CASCADE;
   DROP TABLE "_pages_v_blocks_cta_links" CASCADE;
   DROP TABLE "_pages_v_blocks_cta" CASCADE;
+  DROP TABLE "_pages_v_blocks_carousel_items" CASCADE;
+  DROP TABLE "_pages_v_blocks_carousel" CASCADE;
   DROP TABLE "_pages_v_blocks_content_columns" CASCADE;
   DROP TABLE "_pages_v_blocks_content" CASCADE;
   DROP TABLE "_pages_v_blocks_media_block" CASCADE;
   DROP TABLE "_pages_v_blocks_archive" CASCADE;
   DROP TABLE "_pages_v_blocks_form_block" CASCADE;
+  DROP TABLE "_pages_v_blocks_listing_group" CASCADE;
+  DROP TABLE "_pages_v_blocks_team_info_block" CASCADE;
   DROP TABLE "_pages_v" CASCADE;
   DROP TABLE "_pages_v_rels" CASCADE;
   DROP TABLE "posts_populated_authors" CASCADE;
@@ -1326,13 +1565,17 @@ export async function down({ db, payload, req }: MigrateDownArgs): Promise<void>
   DROP TABLE "users_roles" CASCADE;
   DROP TABLE "users_sessions" CASCADE;
   DROP TABLE "users" CASCADE;
-  DROP TABLE "property_types" CASCADE;
+  DROP TABLE "listing_types" CASCADE;
   DROP TABLE "listings_additional_features" CASCADE;
   DROP TABLE "listings_gallery" CASCADE;
   DROP TABLE "listings" CASCADE;
   DROP TABLE "_listings_v_version_additional_features" CASCADE;
   DROP TABLE "_listings_v_version_gallery" CASCADE;
   DROP TABLE "_listings_v" CASCADE;
+  DROP TABLE "listing_groups" CASCADE;
+  DROP TABLE "listing_groups_rels" CASCADE;
+  DROP TABLE "team_members_social_links" CASCADE;
+  DROP TABLE "team_members" CASCADE;
   DROP TABLE "redirects" CASCADE;
   DROP TABLE "redirects_rels" CASCADE;
   DROP TABLE "forms_blocks_checkbox" CASCADE;
@@ -1365,26 +1608,39 @@ export async function down({ db, payload, req }: MigrateDownArgs): Promise<void>
   DROP TABLE "footer_nav_items" CASCADE;
   DROP TABLE "footer" CASCADE;
   DROP TABLE "footer_rels" CASCADE;
+  DROP TABLE "contact" CASCADE;
   DROP TYPE "public"."enum_pages_hero_links_link_type";
   DROP TYPE "public"."enum_pages_hero_links_link_appearance";
   DROP TYPE "public"."enum_pages_blocks_cta_links_link_type";
   DROP TYPE "public"."enum_pages_blocks_cta_links_link_appearance";
+  DROP TYPE "public"."enum_pages_blocks_carousel_size";
+  DROP TYPE "public"."enum_pages_blocks_carousel_link_type";
+  DROP TYPE "public"."enum_pages_blocks_carousel_link_appearance";
+  DROP TYPE "public"."enum_pages_blocks_carousel_type";
   DROP TYPE "public"."enum_pages_blocks_content_columns_size";
   DROP TYPE "public"."enum_pages_blocks_content_columns_link_type";
   DROP TYPE "public"."enum_pages_blocks_content_columns_link_appearance";
   DROP TYPE "public"."enum_pages_blocks_archive_populate_by";
   DROP TYPE "public"."enum_pages_blocks_archive_relation_to";
+  DROP TYPE "public"."enum_pages_blocks_listing_group_link_type";
+  DROP TYPE "public"."enum_pages_blocks_listing_group_link_appearance";
   DROP TYPE "public"."enum_pages_hero_type";
   DROP TYPE "public"."enum_pages_status";
   DROP TYPE "public"."enum__pages_v_version_hero_links_link_type";
   DROP TYPE "public"."enum__pages_v_version_hero_links_link_appearance";
   DROP TYPE "public"."enum__pages_v_blocks_cta_links_link_type";
   DROP TYPE "public"."enum__pages_v_blocks_cta_links_link_appearance";
+  DROP TYPE "public"."enum__pages_v_blocks_carousel_size";
+  DROP TYPE "public"."enum__pages_v_blocks_carousel_link_type";
+  DROP TYPE "public"."enum__pages_v_blocks_carousel_link_appearance";
+  DROP TYPE "public"."enum__pages_v_blocks_carousel_type";
   DROP TYPE "public"."enum__pages_v_blocks_content_columns_size";
   DROP TYPE "public"."enum__pages_v_blocks_content_columns_link_type";
   DROP TYPE "public"."enum__pages_v_blocks_content_columns_link_appearance";
   DROP TYPE "public"."enum__pages_v_blocks_archive_populate_by";
   DROP TYPE "public"."enum__pages_v_blocks_archive_relation_to";
+  DROP TYPE "public"."enum__pages_v_blocks_listing_group_link_type";
+  DROP TYPE "public"."enum__pages_v_blocks_listing_group_link_appearance";
   DROP TYPE "public"."enum__pages_v_version_hero_type";
   DROP TYPE "public"."enum__pages_v_version_status";
   DROP TYPE "public"."enum_posts_status";
@@ -1400,11 +1656,13 @@ export async function down({ db, payload, req }: MigrateDownArgs): Promise<void>
   DROP TYPE "public"."enum__listings_v_version_pricing_period";
   DROP TYPE "public"."enum__listings_v_version_address_state";
   DROP TYPE "public"."enum__listings_v_version_status";
+  DROP TYPE "public"."enum_team_members_social_links_social_media";
   DROP TYPE "public"."enum_redirects_to_type";
   DROP TYPE "public"."enum_forms_confirmation_type";
   DROP TYPE "public"."enum_payload_jobs_log_task_slug";
   DROP TYPE "public"."enum_payload_jobs_log_state";
   DROP TYPE "public"."enum_payload_jobs_task_slug";
   DROP TYPE "public"."enum_header_nav_items_link_type";
-  DROP TYPE "public"."enum_footer_nav_items_link_type";`)
+  DROP TYPE "public"."enum_footer_nav_items_link_type";
+  DROP TYPE "public"."enum_contact_office_address_state";`)
 }

@@ -1,7 +1,11 @@
 import { ListingCard } from '@/components/ListingCard'
 import configPromise from '@payload-config'
+import { Metadata } from 'next'
 import { getPayload } from 'payload'
 import PageClient from './page.client'
+
+export const dynamic = 'force-static'
+export const revalidate = 600
 
 export default async function Page() {
   const payload = await getPayload({ config: configPromise })
@@ -40,4 +44,15 @@ export default async function Page() {
       </div>
     </main>
   )
+}
+
+export function generateMetadata(): Metadata {
+  return {
+    title: `Listings`,
+    description: `Browse our listings`,
+    openGraph: {
+      title: `Listings`,
+      description: `Browse our listings`,
+    },
+  }
 }
